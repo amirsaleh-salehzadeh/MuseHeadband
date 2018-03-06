@@ -1,6 +1,5 @@
 package app.headband;
 
-import oscP5.OscMessage;
 import oscP5.OscP5;
 
 public class ThreadEEGReceiver implements Runnable {
@@ -9,44 +8,42 @@ public class ThreadEEGReceiver implements Runnable {
 	static MuseOscServer museOscServer;
 	public static MuseSignalEntity EEG;
 	OscP5 museServer;
+	public static boolean stopHeadband;
 
 	public ThreadEEGReceiver() {
 		this.killer = true;
-		 museOscServer = new MuseOscServer();
-		 museOscServer.museServer = new OscP5(museOscServer, "localhost",
-		 5005);
-
+		// muse-io.exe --device Muse-1E5B
+		// muse-io.exe --osc osc.tcp://localhost:4444
+		museOscServer = new MuseOscServer();
+		museOscServer.museServer = new OscP5(museOscServer, "localhost", 5003);
+		stopHeadband = false;
 	}
 
 	@Override
 	public void run() {
 		while (killer) {
 			try {
-				Thread.sleep(3);
+				Thread.sleep(4);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
-			EEG = museOscServer.EEG;
-//			for (int j = 0; j < 500; j++) {
-//				EEG = new MuseSignalEntity(j, j, j, j, j, j, j, j, j);
-//				if (j == 480)
-//					j = 10;
-//			}
+			if (stopHeadband) {
+				EEG = new MuseSignalEntity(0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+				if (museOscServer.museServer.isBroadcast()) {
+					museOscServer.museServer.stop();
+				}
+			} else {
+				if (museOscServer.museServer == null
+						&& !museOscServer.museServer.isBroadcast()) {
+					museOscServer = new MuseOscServer();
+					museOscServer.museServer = new OscP5(museOscServer,
+							"localhost", 5003);
+				}
+				EEG = museOscServer.EEG;
+			}
 		}
 		killer = false;
 		Thread.currentThread().interrupt();
-	}
-
-	void oscEvent(OscMessage msg) {
-		if (msg.checkAddrPattern("/muse/eeg") == true) {
-			EEG = new MuseSignalEntity(0, 0, 0, 0, 0, msg.get(0).floatValue(),
-					msg.get(1).floatValue(), msg.get(2).floatValue(), msg
-							.get(3).floatValue());
-			for (int i = 0; i < 4; i++) {
-				System.out.print("EEG on channel " + i + ": "
-						+ msg.get(i).floatValue() + "\n");
-			}
-		}
 	}
 
 	public static void main(String[] args) {

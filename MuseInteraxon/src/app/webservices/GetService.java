@@ -29,7 +29,7 @@ public class GetService extends Application {
 	@Produces("application/json")
 	public String getEEG() {
 		ObjectMapper mapper = new ObjectMapper();
-		if (t == null){
+		if (t == null) {
 			t = new ThreadEEGReceiver();
 			Thread ts = new Thread(t);
 			ts.setName("EEGStream");
@@ -46,6 +46,30 @@ public class GetService extends Application {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		return json;
+	}
+
+	@GET
+	@Path("/StartHeadband")
+	@Produces("application/json")
+	public String startHeadband() {
+		if (t != null) {
+			t.stopHeadband = false;
+		}
+
+		String json = "[]";
+		return json;
+	}
+
+	@GET
+	@Path("/StopHeadband")
+	@Produces("application/json")
+	public String stopHeadband() {
+		if (t != null) {
+			t.stopHeadband = true;
+		}
+
+		String json = "[]";
 		return json;
 	}
 
