@@ -16,8 +16,9 @@ import org.codehaus.jackson.JsonGenerationException;
 import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.ObjectMapper;
 
-import app.headband.MuseOscServer;
-import app.headband.ThreadEEGReceiver;
+import app.AIengine.NeuralNetworks.FeedforwardNeuralNetwork;
+import app.datastream.eeg.MuseOscServer;
+import app.datastream.eeg.ThreadEEGReceiver;
 
 @Path("GetWS")
 public class GetService extends Application {
@@ -53,8 +54,34 @@ public class GetService extends Application {
 	@Path("/StartHeadband")
 	@Produces("application/json")
 	public String startHeadband() {
+		if (t == null) {
+			t = new ThreadEEGReceiver();
+			Thread ts = new Thread(t);
+			ts.setName("EEGStream");
+			ts.setDaemon(true);
+			ts.start();
+		}
 		if (t != null) {
 			t.stopHeadband = false;
+		}
+
+		String json = "[]";
+		return json;
+	}
+
+	@GET
+	@Path("/StartRecording")
+	@Produces("application/json")
+	public String startRecording() {
+		if (t == null) {
+			t = new ThreadEEGReceiver();
+			Thread ts = new Thread(t);
+			ts.setName("EEGStream");
+			ts.setDaemon(true);
+			ts.start();
+		}
+		if (t != null) {
+			t.record = true;
 		}
 
 		String json = "[]";
@@ -69,6 +96,15 @@ public class GetService extends Application {
 			t.stopHeadband = true;
 		}
 
+		String json = "[]";
+		return json;
+	}
+
+	@GET
+	@Path("/StopSoundTraining")
+	@Produces("application/json")
+	public String stopSoundTraining() {
+		FeedforwardNeuralNetwork.trainingFinished = true;
 		String json = "[]";
 		return json;
 	}

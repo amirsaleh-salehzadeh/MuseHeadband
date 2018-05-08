@@ -4,14 +4,14 @@ function startEEG() {
 	$.get("http://localhost:8080/MuseInteraxon/REST/GetWS/StartHeadband");
 	streamEEG = setInterval(function() {
 		plotEEGSignals();
-	}, 5);
+	}, 200);
 //	webgazer.setRegression("threadedRidge");// https://webgazer.cs.brown.edu
 }
 
 function stopEEG() {
 	$.get("http://localhost:8080/MuseInteraxon/REST/GetWS/StopHeadband");
 	clearInterval(streamEEG);
-	webgazer.end();
+//	webgazer.end();
 }
 
 function plotEEGSignals() {

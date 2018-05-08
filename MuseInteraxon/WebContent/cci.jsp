@@ -18,20 +18,8 @@
 	href="http://fonts.googleapis.com/css?family=Open+Sans:300,400,700">
 <script type="text/javascript" src="js/index.js"></script>
 <script type="text/javascript" src="js/jquery.mobile-1.4.5.min.js"></script>
-<script type="text/javascript" src="js/webgazer.js"></script>
-<script type="text/javascript">
-webgazer.setGazeListener(function(data, elapsedTime) {
-	if (data == null) {
-		return;
-	}
-	var xprediction = data.x; // these x coordinates are relative to the
-	// viewport
-	var yprediction = data.y; // these y coordinates are relative to the
-	// viewport
-	$("#gazerDiv").css("left", xprediction);
-	$("#gazerDiv").css("top", yprediction);
-}).begin();
-</script>
+<!-- <script type="text/javascript" src="js/webgazer.js"></script> -->
+<!-- </script> -->
 </head>
 <body>
 	<div id="gazerDiv"

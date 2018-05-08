@@ -1,0 +1,51 @@
+.eegGraph {
+	width: 100%;
+}
+
+.hprogress {
+	height: 110px;
+	width: 22px;
+	border: transparent;
+	display: inline-block;
+	position: relative;
+}
+
+.ui-bar {
+	padding: 0;
+}
+
+.hprogress-bar {
+	width: 22px;
+	height: 30%;
+	position: relative;
+	background: #000; /* fallback for old browsers */
+	bottom: 0;
+	top: 0;
+}
+
+.fa {
+	font-size: 20px;
+}
+
+.p-absolute {
+	position: absolute;
+	bottom: 0;
+	width: 100%;
+	color: white;
+	text-shadow: none;
+}
+
+.p-absolute i {
+	color: white;
+}
+
+
+#videocontainer {
+	margin: 0px auto;
+	height: 100%;
+}
+
+#videoElement {
+	height: 72px;
+	background-color: #666;
+}
