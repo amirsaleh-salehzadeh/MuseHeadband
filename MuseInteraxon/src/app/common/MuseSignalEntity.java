@@ -29,7 +29,22 @@ public class MuseSignalEntity {
 	public float Concentration = 0;
 	public float Meditation = 0;
 	public String IMG = "";
+	public double predictions = 0;
 	
+	/**
+	 * @return the predictions
+	 */
+	public double getPredictions() {
+		return predictions;
+	}
+
+	/**
+	 * @param predictions the predictions to set
+	 */
+	public void setPredictions(double predictions) {
+		this.predictions = predictions;
+	}
+
 	/**
 	 * @return the iMG
 	 */

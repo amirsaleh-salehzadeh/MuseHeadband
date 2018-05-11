@@ -56,12 +56,7 @@ var updateGraph = function(eegData) {
 };
 
 function onMessage(evt) {
-	var bytes = "";
-	if (evt.data != "" && evt.data != null && evt.data != "null")
-	// bytes = parseInt(evt.data, 2).toString(10);
-	// if (bytes.length > 0)
-	{
-		// var dataTMP = JSON.parse(binaryToString(evt.data));
+	if (evt.data != "" && evt.data != null && evt.data != "null") {
 		var dataTMP = JSON.parse(evt.data);
 		var index = dataTMP.Concentration;
 		if (index != null) {
@@ -179,7 +174,7 @@ function sendText(json) {
 var canvas2, context2, v, w, h;
 
 function startTraining() {
-	connectToTheSocket();
+	// connectToTheSocket();
 	// setTimeout(playNoise, 6000);
 	// setTimeout(playNoise, 9000);
 	// setTimeout(playNoise, 14000);
@@ -187,11 +182,91 @@ function startTraining() {
 	// setTimeout(playNoise, 20000);
 	// setTimeout(playNoise, 44000);
 	// setTimeout(playNoise, 34000);
-	$.get("http://localhost:8080/MuseInteraxon/REST/GetWS/StartHeadband");
+	// $.get("http://localhost:8080/MuseInteraxon/REST/GetWS/StartHeadband");
 	// streamEEG = setInterval(function() {
 	// sendText(convertToBinary(canvas2.toDataURL('image/jpeg', 1.0)));
 	// }, 30);
+	movePointer();
+}
+var pointerX, pointerY, movePointerInterval;
+function movePointer(x, y) {
+	pointerX = 0;
+	pointerY = 0;
+	movePointerInterval = setInterval(movePointerFromLeftToRight, 100);
+	$("#trackingDot").css("left", x + "px");
+	$("#trackingDot").css("top", y + "px");
+}
 
+function movePointerFromLeftToRight() {
+	pointerX += 20;
+	if (pointerX > $(window).width() - 22) {
+		pointerY += 40;
+		pointerX = 0;
+		if (pointerY > $(window).height() - 20) {
+			clearInterval(movePointerInterval);
+			movePointerInterval = setInterval(movePointer2Ways, 100);
+			pointerX = 0;
+			pointerY = 0;
+		}
+	}
+	$("#trackingDot").css("left", pointerX + "px");
+	$("#trackingDot").css("top", pointerY + "px");
+}
+
+var go2Ways = true;// To determine either we going or coming back.
+function movePointer2Ways() {
+	if (go2Ways) {
+		pointerX += 20;
+		if (pointerX > $(window).width() - 22) {
+			pointerY += 40;
+			go2Ways = false;
+		}
+	} else {
+		pointerX -= 20;
+		if (pointerX < 0) {
+			pointerY += 40;
+			go2Ways = true;
+		}
+	}
+	$("#trackingDot").css("left", pointerX + "px");
+	$("#trackingDot").css("top", pointerY + "px");
+	if (pointerY >= $(window).height() - 22) {
+		clearInterval(movePointerInterval);
+		$("#trackingDot").css("left", "50%");
+		$("#trackingDot").css("top", "50%");
+		movePointer2Corners();
+	}
+}
+
+function movePointer2Corners() {
+	setTimeout(function() {
+		$("#trackingDot").css("left", "0");
+		$("#trackingDot").css("top", "0");
+	}, 2500);
+	setTimeout(function() {
+		$("#trackingDot").css("left", "50%");
+		$("#trackingDot").css("top", "50%");
+	}, 4500);
+	setTimeout(function() {
+		$("#trackingDot").css("left", $(window).width() - 22);
+		$("#trackingDot").css("top", "0");
+	}, 6500);
+	setTimeout(function() {
+		$("#trackingDot").css("left", "0");
+		$("#trackingDot").css("top", $(window).height() - 22);
+	}, 8500);
+	setTimeout(function() {
+		$("#trackingDot").css("left", "50%");
+		$("#trackingDot").css("top", "50%");
+	}, 10500);
+	setTimeout(function() {
+		$("#trackingDot").css("left", $(window).width() - 22);
+		$("#trackingDot").css("top", $(window).height() - 22);
+	}, 12500);
+	setTimeout(function() {
+		$("#trackingDot").css("left", "0");
+		$("#trackingDot").css("top", "0");
+	}, 14500);
 }
 
 function connectToTheSocket() {
@@ -234,12 +309,8 @@ function convertToBinary(dataURI) {
 }
 
 function stopSoundTraining() {
-	// $.get("http://localhost:8080/MuseInteraxon/REST/GetWS/StopSoundTraining");
 	$.get("http://localhost:8080/MuseInteraxon/REST/GetWS/StopHeadband");
-	// clearInterval(streamEEG);
 	websocket.close();
-	// audioContext.close();
-	// webgazer.end();
 }
 
 $(document).ready(function() {

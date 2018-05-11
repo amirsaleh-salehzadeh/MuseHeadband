@@ -27,9 +27,10 @@ import org.encog.persist.EncogDirectoryPersistence;
 import app.AIengine.NeuralNetworks.FeedforwardNeuralNetwork;
 import app.AIengine.dataprepration.DataPreparation;
 import app.datastream.eeg.MuseOscServer;
+import app.datastream.eeg.ThreadEEGReceiver;
 
 @ServerEndpoint("/SoundStreamSocket/{client-id}")
-public class NoiseStreamSocketMediator {
+public class TrainingStreamSocketMediator {
 
 	public static Set<Session> peers = Collections
 			.synchronizedSet(new HashSet<Session>());
@@ -41,20 +42,25 @@ public class NoiseStreamSocketMediator {
 		if (imageData == null)
 			return;
 		String[] inputs = imageData.split(",");
-		double[] inputVals = new double[1];
-		if (inputs[0].length() > 0)
-			inputVals[0] = (double) Math
-					.round(Double.parseDouble(inputs[0]) * 100) / 100;
-		double[] idealVals = new double[1];
-		idealVals[0] = Double.parseDouble(inputs[1]);
-		if (dp != null)
-			dp.streamTraining(inputVals, idealVals);
-		else
-			dp = new DataPreparation(25);
-		for (Session s : NoiseStreamSocketMediator.peers) {
-			if (s.isOpen())
-				s.getAsyncRemote().sendText(evaluate(inputVals));
+		double[] inputVals = new double[3];
+		if (ThreadEEGReceiver.EEG != null) {
+			inputVals[0] = ThreadEEGReceiver.EEG.getACC_X();
+			inputVals[1] = ThreadEEGReceiver.EEG.getACC_Y();
+			inputVals[2] = ThreadEEGReceiver.EEG.getACC_Z();
+			double[] idealVals = new double[1];
+			idealVals[0] = Double.parseDouble(inputs[1]);
+			if (dp != null)
+				dp.streamTraining(inputVals, idealVals);
+			else
+				dp = new DataPreparation(25);
+//			for (Session s : NoiseStreamSocketMediator.peers) {
+//				if (s.isOpen())
+//					s.getAsyncRemote().sendText(evaluate(inputVals));
+//			}
 		}
+		// if (inputs[0].length() > 0)
+		// inputVals[0] = (double) Math
+		// .round(Double.parseDouble(inputs[0]) * 100) / 100;
 	}
 
 	@OnOpen

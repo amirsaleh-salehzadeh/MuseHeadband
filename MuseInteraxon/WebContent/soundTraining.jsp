@@ -20,11 +20,20 @@
 <script type="text/javascript"
 	src="js/voiceRecorder/voice.training.stream.js"></script>
 <script type="text/javascript" src="js/stream.data.receive.js"></script>
+<style>
+#trackingDot {
+	width: 22px;
+	height: 22px;
+	background-color: white;
+	border-radius: 50%;
+	position: absolute;
+	top: 50%;
+	left: 50%;
+}
+</style>
 </head>
 <body>
 	<div data-role="page" style="background-color: white;">
-		<!-- 			<div id="gazerDiv" -->
-		<!-- 				style="background-color: red; width: 10px; height: 10px; position: absolute; z-index: 100;"></div> -->
 		<div class="ui-block-solo ui-bar" data-role="header"
 			style="height: 111px;" id="headerDiv">
 			<table style="width: 100%; height: 111px;">
@@ -209,5 +218,6 @@
 			</table>
 		</div>
 	</div>
+		<div id="trackingDot"></div>
 </body>
 </html>

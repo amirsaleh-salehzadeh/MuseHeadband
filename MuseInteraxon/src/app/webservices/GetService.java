@@ -64,7 +64,6 @@ public class GetService extends Application {
 		if (t != null) {
 			t.stopHeadband = false;
 		}
-
 		String json = "[]";
 		return json;
 	}
