@@ -1,7 +1,7 @@
 var wsUri = "ws://" + document.location.host
 		+ "/MuseInteraxon/EEGStreamSocket/5";
 var websocket;
-
+var isStreaming = false;
 var rawData = [ 0, 0, 0, 0 ];
 
 var resolution = 1364;
@@ -67,6 +67,7 @@ function onMessage(evt) {
 }
 
 function plotSignals(data) {
+	isStreaming = true;
 	var conc = Math.round(data.Concentration);
 	var medi = Math.round(data.Meditation);
 	if (conc == null)
@@ -156,17 +157,6 @@ function onClose(evt) {
 	websocket.close();
 }
 
-// For testing purposes
-var output = document.getElementById("output");
-
-function writeToScreen(message) {
-	if (output == null) {
-		output = document.getElementById("output");
-	}
-	// output.innerHTML += message + "";
-	// console.log(message + "");
-}
-
 function sendText(json) {
 	websocket.send(json);
 }
@@ -174,19 +164,9 @@ function sendText(json) {
 var canvas2, context2, v, w, h;
 
 function startTraining() {
-	// connectToTheSocket();
-	// setTimeout(playNoise, 6000);
-	// setTimeout(playNoise, 9000);
-	// setTimeout(playNoise, 14000);
-	// setTimeout(playNoise, 16000);
-	// setTimeout(playNoise, 20000);
-	// setTimeout(playNoise, 44000);
-	// setTimeout(playNoise, 34000);
-	// $.get("http://localhost:8080/MuseInteraxon/REST/GetWS/StartHeadband");
-	// streamEEG = setInterval(function() {
-	// sendText(convertToBinary(canvas2.toDataURL('image/jpeg', 1.0)));
-	// }, 30);
-	movePointer();
+	 connectToTheSocket();
+	 $.get("http://localhost:8080/MuseInteraxon/REST/GetWS/StartMeasuringAccelData");
+	 movePointer2Corners();
 }
 var pointerX, pointerY, movePointerInterval;
 function movePointer(x, y) {
@@ -266,6 +246,7 @@ function movePointer2Corners() {
 	setTimeout(function() {
 		$("#trackingDot").css("left", "0");
 		$("#trackingDot").css("top", "0");
+		 $.get("http://localhost:8080/MuseInteraxon/REST/GetWS/StopMeasuringAccelData");
 	}, 14500);
 }
 

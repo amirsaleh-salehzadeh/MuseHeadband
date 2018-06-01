@@ -23,6 +23,8 @@ public class SignalProcessingUnit {
 	private static int INPUTSIZE;
 	public static ArrayList<ArrayList<Double>> allinputs = new ArrayList<ArrayList<Double>>();
 	public static ArrayList<ArrayList<Double>> cacheAvg = new ArrayList<ArrayList<Double>>();
+	public static ArrayList<ArrayList<Double>> distance = new ArrayList<ArrayList<Double>>();
+	public static ArrayList<ArrayList<Double>> velocity = new ArrayList<ArrayList<Double>>();
 	public static ArrayList<ArrayList<Double>> tempIncoming2Smooth = new ArrayList<ArrayList<Double>>();
 	public static ArrayList<ArrayList<Double>> filterMAXsAtBegninning = new ArrayList<ArrayList<Double>>();
 	public static ArrayList<double[]> OutP = new ArrayList<double[]>();
@@ -41,6 +43,7 @@ public class SignalProcessingUnit {
 		CONFIGS = config;
 		INPUTSIZE = inputSize;
 		resetArrays();
+		lastTime = System.currentTimeMillis();
 	}
 
 	public static double[] getOutputValues(double[] rawSignals) {
@@ -117,13 +120,47 @@ public class SignalProcessingUnit {
 		}
 	}
 
+	public static double measureScalarValues(double[] inputs) {
+		double sum = 0;
+		for (int i = 0; i < inputs.length; i++) {
+			sum += Math.pow(inputs[i], 2);
+		}
+		return Math.sqrt(sum);
+	}
+
+	public static long lastTime = 0;
+
+	public static double[] measureDistanceFromAccel(double[] acceleration) {
+		double[] res = new double[4];
+		// velocity(i) = velocity(i-1) + acceleration (i)
+		// position(i) = position (i-1) + velocity (i)
+		double time = System.currentTimeMillis() - lastTime;
+		for (int i = 0; i < acceleration.length; i++) {
+			if (distance.get(i).size() == 0) {
+				velocity.get(i).add(0.0);
+				distance.get(i).add(0.0);
+			} else {
+				velocity.get(i).add(acceleration[i] * time);
+				distance.get(i).add(acceleration[i] * Math.pow(time, 2) + (velocity.get(i).get(velocity.get(i).size()-1) * time));
+			}
+			res[i] = distance.get(i).get(distance.get(i).size() - 1);
+			if (distance.get(i).size() > SLIDING_WINDOW_SIZE) {
+				distance.get(i).remove(0);
+				velocity.get(i).remove(0);
+			}
+			lastTime = System.currentTimeMillis();
+		}
+		return res;
+	}
+
 	public static void measureAverageValuesInterval() {
 		double[] tmp = new double[8];
 		double[] tmpcoef = new double[28];
 		int counterCoeff = 0;
 		for (int i = 0; i < allinputs.size(); i++) {
-			tmp[i] = Math.sqrt((sumPow2(allinputs.get(i))
-					.doubleValue() / allinputs.get(i).size()));
+			tmp[i] = Math
+					.sqrt((sumPow2(allinputs.get(i)).doubleValue() / allinputs
+							.get(i).size()));
 			cacheAvg.get(i).add(tmp[i]);
 			if (cacheAvg.get(allinputs.size() - 1).size() > 1) {
 				ArrayList<double[]> curveList = new ArrayList<double[]>();
@@ -176,6 +213,12 @@ public class SignalProcessingUnit {
 
 	public static void resetArrays() {
 		allinputs = new ArrayList<ArrayList<Double>>();
+		distance = new ArrayList<ArrayList<Double>>();
+		velocity = new ArrayList<ArrayList<Double>>();
+		for (int i = 0; i < 4; i++) {
+			distance.add(new ArrayList<Double>());
+			velocity.add(new ArrayList<Double>());
+		}
 		cacheAvg = new ArrayList<ArrayList<Double>>();
 		tempIncoming2Smooth = new ArrayList<ArrayList<Double>>();
 		filterMAXsAtBegninning = new ArrayList<ArrayList<Double>>();

@@ -5,19 +5,15 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.Set;
-
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Application;
 import org.codehaus.jackson.JsonGenerationException;
 import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.ObjectMapper;
 
 import app.AIengine.NeuralNetworks.FeedforwardNeuralNetwork;
-import app.datastream.eeg.MuseOscServer;
 import app.datastream.eeg.ThreadEEGReceiver;
 
 @Path("GetWS")
@@ -83,6 +79,36 @@ public class GetService extends Application {
 			t.record = true;
 		}
 
+		String json = "[]";
+		return json;
+	}
+
+	@GET
+	@Path("/StartMeasuringAccelData")
+	@Produces("application/json")
+	public String startMeasuringAccelData() {
+		if (t == null) {
+			t = new ThreadEEGReceiver();
+			Thread ts = new Thread(t);
+			ts.setName("EEGStream");
+			ts.setDaemon(true);
+			ts.start();
+			t.accelRecord = true;
+			t.stopHeadband = false;
+		}
+		String json = "[]";
+		return json;
+	}
+
+	@GET
+	@Path("/StopMeasuringAccelData")
+	@Produces("application/json")
+	public String stopMeasuringAccelData() {
+		if (t != null) {
+			t.accelRecord = false;
+			t.stopHeadband = true;
+			t = null;
+		}
 		String json = "[]";
 		return json;
 	}

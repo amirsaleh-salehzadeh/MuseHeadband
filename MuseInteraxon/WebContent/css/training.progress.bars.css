@@ -1,0 +1,42 @@
+.eegGraph {
+	width: 100%;
+}
+
+.hprogress {
+	height: 50px;
+	width: 32px;
+	border: transparent;
+	display: inline-block;
+	position: relative;
+	margin-right: 22px;
+}
+
+.ui-bar {
+	padding: 0;
+}
+
+.hprogress-bar {
+	width: 32px;
+	height: 10%;
+	position: relative;
+	background: #000; /* fallback for old browsers */
+	bottom: 0;
+	top: 0;
+}
+
+.fa {
+	font-size: 20px;
+}
+
+.p-absolute {
+	position: absolute;
+	bottom: 0;
+	width: 100%;
+	color: white;
+	text-shadow: none;
+	text-align: center;
+}
+
+.p-absolute i {
+	color: white;
+}

@@ -1,0 +1,210 @@
+body {
+	min-width: 600px !important;
+	overflow: hidden;
+}
+
+/* Video Feed Styling */
+#overlay {
+	z-index: 1;
+}
+
+.ui-page-theme-a .ui-btn {
+	color: white;
+	text-shadow: none;
+}
+
+.ui-listview {
+	margin: 0 !important;
+}
+
+.ui-listview>.ui-li-static {
+	padding: 0;
+}
+
+.helpBtn {
+	padding: 15px;
+	border: none;
+	background: none;
+	color: #777;
+}
+
+.ui-panel.ui-panel-open {
+	position: fixed;
+	overflow: hidden;
+}
+
+.ui-panel,.ui-panel-inner {
+	height: 100%;
+	overflow-y: scroll;
+	overflow-x: hidden;
+	min-width: 320px;
+}
+
+#mainPage,#pageContents {
+	width: 100%;
+	height: 100%;
+	overflow: hidden;
+}
+
+.ui-header {
+	border: none !important;
+}
+
+.ui-panel-inner,#leftSidePanel {
+	padding: 0.22em !important;
+	min-width: 320px !important;
+}
+
+.ui-content {
+	padding: 0px !important;
+}
+
+#webGazerContainerLI {
+	min-height: 240px;
+}
+
+.ui-page-theme-a .ui-body-inherit {
+	background: none;
+	color: white;
+	text-shadow: none;
+}
+
+.helpBtn a {
+	background: none;
+	color: #777;
+}
+
+.helpBtn a:hover {
+	color: black !important;
+	text-decoration: none;
+}
+
+.modal-header {
+	border-bottom: none !important;
+}
+
+/* Calibration button styling */
+.Calibration {
+	width: 20px !important;
+	height: 20px !important;
+	-webkit-border-radius: 25px !important;
+	-moz-border-radius: 25px !important;
+	border-radius: 25px !important;
+	opacity: 0.2 !important;
+	border-color: black !important;
+	border-style: solid !important;
+	position: absolute !important;
+}
+
+.calibrationDiv {
+	bottom: 0;
+	right: 0;
+	position: fixed;
+	background-color: white;
+	top: 0;
+	display: none;
+	height: 100%;
+	left: 0;
+}
+
+/* Calibration point position */
+#Pt1 {
+	top: 2%;
+	left: 5%;
+}
+
+#Pt2 {
+	top: 2%;
+	left: 50%;
+}
+
+#Pt3 {
+	top: 2%;
+	right: 2%;
+}
+
+#Pt4 {
+	top: 50%;
+	left: 2%;
+}
+
+#Pt5 {
+	top: 50%;
+	left: 50%;
+}
+
+#Pt6 {
+	top: 50%;
+	right: 5%;
+}
+
+#Pt7 {
+	bottom: 2%;
+	left: 2%;
+}
+
+#Pt8 {
+	bottom: 2%;
+	left: 50%;
+}
+
+#Pt9 {
+	bottom: 2%;
+	right: 2%;
+}
+
+#faceOverlay {
+	width: 117px;
+	height: 117px;
+	border: none !important;
+}
+
+#plotting_canvas {
+	z-index: -1;
+}
+
+#textContainer {
+	text-shadow: none;
+	background-color: white;
+	padding: 0px 22px 0px 22px;
+	display: inline-block;
+	line-height: 1.4;
+}
+
+#readingText {
+	text-align: center;
+	display: inline;
+	vertical-align: middle;
+	float: right;
+}
+
+.spanWordContainer {
+	display: inline-block;
+	font-size: 18pt;
+	padding-right: 3px;
+}
+
+.ui-panel-page-content-position-right.ui-panel-page-content-display-push
+	{
+	margin-right: 52px;
+}
+
+.gazedParagraph {
+	border-radius: 11px;
+	background: transparent;
+	-webkit-box-shadow: 0 9px 6px #666;
+	-moz-box-shadow: 0 9px 6px #666;
+	box-shadow: 0 9px 6px #666;
+}
+
+.gazedParagraph span {
+	border-radius: 3px;
+	background: transparent;
+	-webkit-box-shadow: 0 2px 1px #999;
+	-moz-box-shadow: 0 2px 1px #999;
+	box-shadow: 0 2px 1px #999;
+}
+
+#readingText p {
+	padding: 3px;
+}

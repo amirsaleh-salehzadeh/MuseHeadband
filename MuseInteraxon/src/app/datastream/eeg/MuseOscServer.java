@@ -6,7 +6,7 @@ import oscP5.*;
 public class MuseOscServer {
 	private boolean isAbs = false;
 	public static MuseSignalEntity EEG;
-	OscP5 museServer;
+	public static OscP5 museServer;
 
 	void oscEvent(OscMessage msg) {
 		if (EEG == null)
@@ -91,9 +91,15 @@ public class MuseOscServer {
 			EEG.setREF(msg.get(1).floatValue());
 		}
 		if (msg.checkAddrPattern("/muse/acc") == true) {
-			EEG.setACC_X(msg.get(0).floatValue());
-			EEG.setACC_Y(msg.get(1).floatValue());
-			EEG.setACC_Z(msg.get(2).floatValue());
+			System.out.println(System.currentTimeMillis());
+			EEG.setACC_X(msg.get(0).floatValue() / 2000);
+			EEG.setACC_Y(msg.get(1).floatValue() / 2000);
+			EEG.setACC_Z(msg.get(2).floatValue() / 2000);
+		}
+		if (msg.checkAddrPattern("/muse/gyro") == true) {
+			System.out.println(msg.get(0).floatValue());
+			System.out.println(msg.get(1).floatValue());
+			System.out.println(msg.get(2).floatValue());
 		}
 		if (msg.checkAddrPattern("/muse/elements/blink") == true) {
 			if (msg.get(0).intValue() == 1) {

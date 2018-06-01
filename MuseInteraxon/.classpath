@@ -1,11 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
 	<classpathentry kind="src" path="src"/>
-	<classpathentry kind="con" path="org.eclipse.jst.server.core.container/org.eclipse.jst.server.tomcat.runtimeTarget/Apache Tomcat v7.0">
-		<attributes>
-			<attribute name="owner.project.facets" value="jst.web"/>
-		</attributes>
-	</classpathentry>
+	<classpathentry kind="src" path="moa"/>
 	<classpathentry kind="con" path="org.eclipse.jst.j2ee.internal.web.container"/>
 	<classpathentry kind="con" path="org.eclipse.jst.j2ee.internal.module.container"/>
 	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/jersey-archive-1.19.1/lib/jackson-core-asl-1.9.2.jar"/>
@@ -29,5 +25,20 @@
 	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/jersey-archive-1.19.1/contribs/oauth-server-1.19.1.jar"/>
 	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/jersey-archive-1.19.1/contribs/oauth-signature-1.19.1.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="con" path="org.eclipse.jst.server.core.container/org.eclipse.jst.server.tomcat.runtimeTarget/Apache Tomcat v7.0"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/commons-math3-3.6.jar"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/encogJar.jar"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/fannj-0.6.jar"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/fannj-0.7.jar"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/flanagan.jar"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/guava.jar"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/j2ee.jar"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/jblas-1.2.4.jar"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/jfreechart.jar"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/jna-3.0.9.jar"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/jna.jar"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/oscP5.jar"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/poi-3.13-20150929.jar"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/sizeofag-1.0.0.jar"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>

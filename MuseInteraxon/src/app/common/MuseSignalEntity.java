@@ -22,6 +22,9 @@ public class MuseSignalEntity {
 	public float ACC_X;
 	public float ACC_Y;
 	public float ACC_Z;
+	public float GYRO_X;
+	public float GYRO_Y;
+	public float GYRO_Z;
 	public float EEG1 = 0;
 	public float EEG2 = 0;
 	public float EEG3 = 0;
@@ -183,7 +186,7 @@ public class MuseSignalEntity {
 	}
 
 	public void setACC_X(float aCC_X) {
-		ACC_X = aCC_X;
+		ACC_X = (float) (aCC_X * 9.8);
 	}
 
 	public float getACC_Y() {
@@ -191,7 +194,7 @@ public class MuseSignalEntity {
 	}
 
 	public void setACC_Y(float aCC_Y) {
-		ACC_Y = aCC_Y;
+		ACC_Y = (float) (aCC_Y * 9.8);
 	}
 
 	public float getACC_Z() {
@@ -199,7 +202,7 @@ public class MuseSignalEntity {
 	}
 
 	public void setACC_Z(float aCC_Z) {
-		ACC_Z = aCC_Z;
+		ACC_Z = (float) (aCC_Z * 9.8);
 	}
 
 	public MuseSignalEntity(float alpha, float beta, float teta, float gamma,

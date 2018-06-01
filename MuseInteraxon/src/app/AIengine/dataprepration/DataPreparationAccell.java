@@ -1,282 +1,81 @@
 package app.AIengine.dataprepration;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 
-import org.apache.commons.math3.stat.StatUtils;
 import org.jblas.DoubleMatrix;
 
-import app.AIengine.NeuralNetworks.FeedforwardNeuralNetwork;
 import app.signalprocessing.SignalProcessingConfig;
 import app.signalprocessing.SignalProcessingUnit;
-
-import com.google.common.primitives.Doubles;
 
 public class DataPreparationAccell {
 	public static DoubleMatrix[][] KinesDistance;
 	static int AVGportion = 10;
 	// static int noOfTasks = 10;
 
-	public static ArrayList<double[]> PD = new ArrayList<double[]>();
-	public static ArrayList<double[][]> PDALL = new ArrayList<double[][]>();
-	public static ArrayList<double[][]> PDALLIDEAL = new ArrayList<double[][]>();
+	public static ArrayList<double[]> allProcessedSignals;
 	public static SignalProcessingUnit ODAM;
-	public static double noise;
-	private static ArrayList<ArrayList<double[]>> TMPAllProcessedSignals;
-	private static ArrayList<ArrayList<Integer>> ideals;
 
 	// public static double IDEAL[][];
 
-	public DataPreparationAccell(int average_portion) {
-		KinesDistance = null;
-		AVGportion = average_portion;
-		// noOfTasks = noOftask;
-		PDALL = new ArrayList<double[][]>();
-		PDALLIDEAL = new ArrayList<double[][]>();
-		PD = new ArrayList<double[]>();
-
-	}
-
-	public static void streamTraining(double[] input, int[] ideal) {
+	public static void recordAccelOnSpreedSheet(double[] input) {
+		if (allProcessedSignals == null)
+			allProcessedSignals = new ArrayList<double[]>();
 		ArrayList<Integer> spc = new ArrayList<Integer>();
 		spc.add(SignalProcessingConfig.SD);
-		if (TMPAllProcessedSignals == null) {
-			TMPAllProcessedSignals = new ArrayList<>();
-			ideals = new ArrayList<>();
-			for (int k = 0; k < ideal.length; k++) {
-				TMPAllProcessedSignals.add(new ArrayList<double[]>());
-				ideals.add(new ArrayList<Integer>());
-			}
+		double[] accels = new double[4];
+		double[] res = new double[8];
+		for (int i = 0; i < input.length; i++) {
+			accels[i] = input[i];
+			res[i] = input[i];
 		}
 		if (ODAM == null)
-			ODAM = new SignalProcessingUnit(AVGportion, spc, input.length);
-		double[] tmpAVal = ODAM.getOutputValues(input);
-		if (tmpAVal != null) {
-			FeedforwardNeuralNetwork ffn = new FeedforwardNeuralNetwork(tmpAVal);
-			ffn.RAWINPUT = input;
-			if (ffn.INPUT == null) {
-				ffn.INPUT = new double[20][input.length];
-				ffn.IDEAL = new double[20][ideal.length];
+			ODAM = new SignalProcessingUnit(10, spc, input.length);
+		accels[3] = ODAM.measureScalarValues(input);
+		res[3] = accels[3];
+		double[] measuredDistances = ODAM.measureDistanceFromAccel(accels);
+		for (int j = 0; j < measuredDistances.length; j++) {
+			res[j + 4] = measuredDistances[j];
+		}
+		if (allProcessedSignals.size() == 0)
+			allProcessedSignals.add(res);
+		else if (!Arrays.equals(
+				allProcessedSignals.get(allProcessedSignals.size() - 1),
+				res))
+			allProcessedSignals.add(res);
+	}
+
+	public static void exportExcelforAccels() {
+		if (allProcessedSignals == null)
+			return;
+		ExcelDataStorage ed = new ExcelDataStorage(false);
+		ArrayList<double[]> TMPAll0 = new ArrayList<double[]>();
+		ArrayList<double[]> TMPAll3 = new ArrayList<double[]>();
+		ArrayList<double[]> TMPAll1 = new ArrayList<double[]>();
+		ArrayList<double[]> TMPAll2 = new ArrayList<double[]>();
+		if (allProcessedSignals.size() <= 60000)
+			for (int i = 0; i < allProcessedSignals.size(); i++) {
+				TMPAll0.add(allProcessedSignals.get(i));
 			}
-			for (int j = 0; j < TMPAllProcessedSignals.size(); j++){
-				TMPAllProcessedSignals.get(j).add(tmpAVal);
-				if (TMPAllProcessedSignals.size() >= 20) {
-//					ffn.INPUT[j] = Doubles.toArray(TMPAllProcessedSignals.get(j));
-					TMPAllProcessedSignals.remove(0);
+		else {
+			for (int i = 0; i < 60000; i++) {
+				TMPAll0.add(allProcessedSignals.get(i));
+			}
+			if (TMPAll0.size() >= 60000)
+				for (int i = 60000; i < 120000; i++) {
+					TMPAll1.add(allProcessedSignals.get(i));
 				}
-			}
-//			for (int i = 0; i < input.length; i++) {
-//				TMPAllProcessedSignals.add(tmpAVal[i]);
-//				if (TMPAllProcessedSignals.size() >= AVGportion) {
-//					ffn.INPUT[i] = Doubles.toArray(TMPAllProcessedSignals);
-//					TMPAllProcessedSignals.remove(0);
-//				}
-//			}
-//			for (int i = 0; i < ideal.length; i++) {
-//				ideals.add(ideal[i]);
-//				if (ideals.size() >= AVGportion) {
-//					ffn.IDEAL[i] = Doubles.toArray(ideals);
-//					ideals.remove(0);
-//				}
-//			}
-			String recording = tmpAVal[0] + "_" + ideal[0] + "\n";
-			RecordData.recordMainTask(recording, true);
-			ffn.dynamicNetwork(tmpAVal.length, 0, 0);
-		}
-		// System.out.println("SD>>");
-		// System.out.printf("%.9f", tmpAVal[0]);
-		// System.out.println("<<SD");
-
-	}
-
-	public static void fileReaderKines() {
-		measureDistanceOfNormal();
-		fileReader();
-	}
-
-	public static void fileReader() {
-		String target_dir = "C:\\TMPFiles\\Kinesiology\\Main\\";
-		File dir = new File(target_dir);
-		File[] files = dir.listFiles();
-		ArrayList<ArrayList<double[]>> TMPAllKines = new ArrayList<ArrayList<double[]>>();
-		ArrayList<ArrayList<Integer>> ideals = new ArrayList<ArrayList<Integer>>();
-		for (int k = 0; k < files.length; k++) {
-			TMPAllKines.add(new ArrayList<double[]>());
-			ideals.add(new ArrayList<Integer>());
-		}
-		ArrayList<double[]> realVals = new ArrayList<double[]>();
-		for (int i = 0; i < files.length; i++) {
-			BufferedReader inputStream = null;
-			try {
-				inputStream = new BufferedReader(new FileReader(files[i]));
-			} catch (FileNotFoundException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
-			String line;
-			ArrayList<double[]> OnlineActivationRateMerged = new ArrayList<double[]>();
-			ArrayList<ArrayList<double[]>> TMPAllTasks = null;
-			// TMPAllTasks = new ArrayList<>();
-			// for (int k = 0; k < files.length; k++) {
-			// TMPAllTasks.add(new ArrayList<double[]>());
-			// }
-			// int counter = noOflines[minIndex];
-			// SignalProcessingUnit ODAM = new SignalProcessingUnit(AVGportion,
-			// new ArrayList<SignalProcessingConfig>(), );
-			try {
-				while ((line = inputStream.readLine()) != null) {
-					if (line != null) {
-						// System.out.println("Start "+
-						// System.currentTimeMillis());
-						if (ODAM.AllOuts != null) {
-							double[] rawSignals = new double[2];
-							double[] tmpAVal = ODAM.getOutputValues(rawSignals);
-							for (int j = 0; j < TMPAllKines.size(); j++) {
-								TMPAllKines.get(j).add(tmpAVal);
-								if (i == j) {
-									ideals.get(j).add(1);
-								} else {
-									ideals.get(j).add(0);
-								}
-							}
-							realVals.add(ODAM.realVal);
-						}
-					}
+			if (TMPAll1.size() >= 60000)
+				for (int i = 120000; i < 180000; i++) {
+					TMPAll2.add(allProcessedSignals.get(i));
 				}
-
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			try {
-				inputStream.close();
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
-		for (int j = 0; j < TMPAllKines.size(); j++) {
-			double[][] training = new double[TMPAllKines.get(j).size()][TMPAllKines
-					.get(j).get(0).length];
-			for (int k = 0; k < TMPAllKines.get(j).size(); k++) {
-				training[k] = TMPAllKines.get(j).get(k);
-			}
-			PDALL.add(training);
-		}
-		double[][] training = new double[ideals.get(0).size()][ideals.size()];// take
-																				// *
-																				// ideals.size()
-																				// for
-																				// one
-																				// network
-																				// for
-																				// (int
-																				// j
-																				// =
-																				// 0;
-																				// j
-																				// <
-																				// ideals.size();
-																				// j++)
-																				// {
-		// for (int k = 0; k < ideals.get(j).size(); k++) {
-		// training[k][j] = ideals.get(j).get(k);
-		// }
-
-		// }
-
-		// double[][] training = new double[ideals.get(0).size() *
-		// ideals.size()][1];
-		for (int j = 0; j < ideals.size(); j++) {
-			// training = new double[ideals.get(j).size()][1];
-			for (int k = 0; k < ideals.get(j).size(); k++) {
-				training[k][j] = ideals.get(j).get(k);
-			}
-			PDALLIDEAL.add(training);
-		}
-	}
-
-	private static void measureDistanceOfNormal() {
-		String target_dir = "C:\\TMPFiles\\Kinesiology\\";
-		File dir = new File(target_dir);
-
-		File[] MainFolder = dir.listFiles();
-		for (int z = 0; z < MainFolder.length; z++)
-			if (!MainFolder[z].isFile()
-					&& !MainFolder[z].getName().equalsIgnoreCase("Main")
-					&& !MainFolder[z].getName().equalsIgnoreCase("Orientation")) {
-				target_dir = "C:\\TMPFiles\\Kinesiology\\"
-						+ MainFolder[z].getName() + "\\";
-
-				dir = new File(target_dir);
-				File[] files = dir.listFiles();
-
-				if (KinesDistance == null)
-					KinesDistance = new DoubleMatrix[MainFolder.length - 2][files.length];
-
-				for (int i = 0; i < files.length; i++) {
-					KinesDistance[z][i] = new DoubleMatrix(
-							new double[files.length][8]);
-					BufferedReader inputStream = null;
-					try {
-						inputStream = new BufferedReader(new FileReader(
-								files[i]));
-					} catch (FileNotFoundException e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
-					}
-					String line;
-					// ODAM = new SignalProcessingUnit(AVGportion,
-					// new SignalProcessingConfig());
-					ArrayList<double[]> OnlineCurved = new ArrayList<double[]>();
-					try {
-						// if (i == 0) {
-						while ((line = inputStream.readLine()) != null) {
-							// ODAM.measureNormalValues(line);
-							if (ODAM.AVG != null) {
-								OnlineCurved.add(ODAM.AVG);
-							}
-						}
-						ArrayList<ArrayList<Double>> tmp = new ArrayList<ArrayList<Double>>();
-						for (int j = 0; j < 8; j++) {
-							tmp.add(new ArrayList<Double>());
-						}
-						double[][] meanVals = new double[AVGportion][8];
-						int counterMtx = 0;
-						for (int h = 0; h < 8; h++) {
-							for (int j = 0; j < OnlineCurved.size(); j++) {
-								tmp.get(h).add(OnlineCurved.get(j)[h]);
-								if (j != 0 && counterMtx < AVGportion)
-									if (j % (OnlineCurved.size() / AVGportion) == 0) {
-										meanVals[counterMtx][h] = StatUtils
-												.mean(Doubles.toArray(tmp
-														.get(h)));
-										tmp = new ArrayList<ArrayList<Double>>();
-										for (int f = 0; f < 8; f++) {
-											tmp.add(new ArrayList<Double>());
-										}
-										// if (j == 0)
-										counterMtx++;
-									}
-							}
-							counterMtx = 0;
-						}
-						DoubleMatrix mean4file = new DoubleMatrix(meanVals);
-						KinesDistance[z][i] = mean4file;
-					} catch (IOException e) {
-						e.printStackTrace();
-					}
-					try {
-						inputStream.close();
-					} catch (IOException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
+			if (TMPAll2.size() >= 60000)
+				for (int i = 180000; i < allProcessedSignals.size(); i++) {
+					TMPAll3.add(allProcessedSignals.get(i));
 				}
-			}
+		}
+		ed.createExcel(TMPAll0, null, TMPAll1, TMPAll2, TMPAll3, null, null,
+				null, null, null, null, null);
 	}
+
 }
