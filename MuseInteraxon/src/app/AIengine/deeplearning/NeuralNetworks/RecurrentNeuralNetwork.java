@@ -22,7 +22,6 @@ public class RecurrentNeuralNetwork {
 		boolean preciseCPUTiming = TimingUtils.enablePreciseTiming();
 		long evaluateStartTime = TimingUtils.getNanoCPUTimeOfCurrentThread();
 		while (stream.hasMoreInstances() && numberSamples < numInstances) {
-			System.out.println(System.currentTimeMillis());
 			Instance trainInst = stream.nextInstance().getData();
 			if (isTesting) {
 				if (learner.correctlyClassifies(trainInst)) {
