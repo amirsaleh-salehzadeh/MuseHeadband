@@ -23,18 +23,14 @@ import app.datastream.eeg.MuseOscServer;
 @ServerEndpoint("/EEGStreamSocket/{client-id}")
 public class GetServiceStreamSocketMediator {
 
-	public static Set<Session> peers = Collections
-			.synchronizedSet(new HashSet<Session>());
+	public static Set<Session> peers = Collections.synchronizedSet(new HashSet<Session>());
 
 	@OnMessage
-	public void onMessage(byte[] imageData,
-			@PathParam("client-id") String clientId, Session session) {
+	public void onMessage(byte[] imageData, @PathParam("client-id") String clientId, Session session) {
 		StringBuilder sb = new StringBuilder();
 		sb.append("data:image/png;base64,");
-		sb.append(StringUtils.newStringUtf8(Base64.encodeBase64(imageData,
-				false)));
-		if (MuseOscServer.EEG != null
-				&& !MuseOscServer.EEG.getIMG().equals(sb.toString()))
+		sb.append(StringUtils.newStringUtf8(Base64.encodeBase64(imageData, false)));
+		if (MuseOscServer.EEG != null && !MuseOscServer.EEG.getIMG().equals(sb.toString()))
 			MuseOscServer.EEG.setIMG(sb.toString());
 	}
 
@@ -45,10 +41,8 @@ public class GetServiceStreamSocketMediator {
 	}
 
 	@OnClose
-	public void onClose(Session session,
-			@PathParam("client-id") String clientId, CloseReason closeReason) {
-		System.out.println("mediator: closed websocket channel for client "
-				+ clientId);
+	public void onClose(Session session, @PathParam("client-id") String clientId, CloseReason closeReason) {
+		System.out.println("mediator: closed " + "websocket channel for client " + clientId);
 		peers.remove(session);
 	}
 

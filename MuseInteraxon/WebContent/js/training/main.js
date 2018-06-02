@@ -112,7 +112,7 @@ function loadText() {
 				// ADDING THE WORDS TO SPANS
 				var words = $("#readingText").html().split(" ");
 				var newWords = "<p id='0' data-visited-counter='0'>";
-				for ( var p = 0; p < words.length; p++) {
+				for (var p = 0; p < words.length; p++) {
 					if (words[p].length <= 1)
 						continue;
 					if (words[p].indexOf("<br") == -1) {
