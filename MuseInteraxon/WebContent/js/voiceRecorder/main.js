@@ -71,6 +71,6 @@ function drawLoop(time) {
 }
 
 function updateBar(id, value) {
-	$("#"+id).css("height", 100 - (value * 100) + "%");
+	$("#"+id).css("height", 100 - (value * 100) + "%").trigger("create");
 	sendText($("#volume").val()+","+ soundIdealValue);
 }

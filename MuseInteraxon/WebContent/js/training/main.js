@@ -8,55 +8,94 @@ var readingPadWidth = 0;
 var tenPercWidth = 0;
 var lastTop = -1;
 var noOfRows = 0;
+var showFaceOverlay = true;
+var cl;
 
+function startTimer() {
+	var today = new Date();
+	var h = today.getHours();
+	var m = today.getMinutes();
+	var s = today.getSeconds();
+	m = checkTime(m);
+	s = checkTime(s);
+	document.getElementById('timerSpan').innerHTML = h + ":" + m + ":" + s;
+	var t = setTimeout(startTimer, 1000);
+}
+
+function checkTime(i) {
+	if (i < 10) {
+		i = "0" + i
+	}
+	;// add zero in front of numbers < 10
+	return i;
+}
+
+function loadMenu() {
+	$("#leftSidePanel").load("menu.html", function() {
+		$("#leftSidePanel").trigger("create");
+		$("#leftSidePanel").panel("open");
+	});
+
+}
+var pauseOverlay = false;
 window.onload = function() {
-	// loadText();
-	// start the webgazer tracker
-	var width = 320;
-	var height = 240;
-	var topDist = '0px';
+	startTimer();
+	loadText(2);
+	loadMenu();
+	$(".ui-content").height($.mobile.getScreenHeight());
 	var leftDist = '0px';
-
-	// Set up the webgazer video feedback.
 	var setup = function() {
-		// Set up video variable to store the camera feedback
+		webgazer.params.videoElementId = "webgazerVideoFeed";
 		var video = document.getElementById('webgazerVideoFeed');
-
-		// Position the camera feedback to the top left corner.
-		video.style.display = 'block';
-		video.style.position = 'fixed';
-		video.style.top = topDist;
+		var video2 = document.getElementById('webgazerVideoPresentation');
+		video.style.display = 'none';
+		video.style.bottom = '0px';
 		video.style.left = leftDist;
-
-		// Set up the video feedback box size
-		video.width = width;
-		video.height = height;
+		video.style.position = 'absolute';
+		video.width = $(window).width();
+		video.height = $(window).height();
 		video.style.margin = '0px';
 		video.style.background = '#222222';
+		video.style.zIndex = '-1';
+		var width = Math.round($("#leftSidePanel").width());
+		var height = Math.round(width / 1.33);
+		video2.src = video.src;
+		video2.style.display = 'block';
+		video2.style.bottom = '0px';
+		video2.style.left = leftDist;
+		video2.style.position = 'absolute';
+		video2.width = width;
+		video2.height = height;
+		video2.style.margin = '0px';
+		video2.style.zIndex = '22';
 		webgazer.params.imgWidth = width;
 		webgazer.params.imgHeight = height;
-
+		$("#webGazerContainer").width(width);
+		$("#webGazerContainer").height(height);
 		// Set up the main canvas. The main canvas is used to calibrate the
 		// webgazer.
 		var overlay = document.createElement('canvas');
 		overlay.id = 'overlay';
 
 		// Setup the size of canvas
-		overlay.style.position = 'fixed';
 		overlay.width = width;
 		overlay.height = height;
-		overlay.style.top = topDist;
+		overlay.style.bottom = '0px';
 		overlay.style.left = leftDist;
 		overlay.style.margin = '0px';
+		overlay.style.position = 'absolute';
 
 		// Draw the face overlay on the camera video feedback
 		var faceOverlay = document.createElement('face_overlay');
 		faceOverlay.id = 'faceOverlay';
-		faceOverlay.style.position = 'fixed';
+		faceOverlay.style.position = 'absolute';
 		faceOverlay.style.top = '59px';
 		faceOverlay.style.left = '107px';
 		faceOverlay.style.border = 'solid';
+		faceOverlay.style.zIndex = '22';
 
+		overlay.style.zIndex = '33';
+		document.getElementById("webGazerContainer").appendChild(video);
 		document.getElementById("webGazerContainer").appendChild(overlay);
 		document.getElementById("webGazerContainer").appendChild(faceOverlay);
 
@@ -67,18 +106,34 @@ window.onload = function() {
 		canvas.style.top = '0px';
 		canvas.style.right = '0px';
 		canvas.style.left = '0px';
-		var cl = webgazer.getTracker().clm;
-
+		canvas.style.bottom = '0px';
+		cl = webgazer.getTracker().clm;
+		$("#webGazerContainer").trigger("create");
 		// This function draw the face of the user frame.
 		function drawLoop() {
+			if (pauseOverlay)
+				return;
 			requestAnimFrame(drawLoop);
 			overlay.getContext('2d').clearRect(0, 0, width, height);
 			if (cl.getCurrentPosition()) {
 				cl.draw(overlay);
 			}
+			$("#microphone").css("height", "0%");
+			$("#microphone").parent().css("background-color",
+					getColorForPercentage(1 - meter.volume));
+			$("#volume").val(1 - meter.volume);
 		}
 		drawLoop();
-		evaluateAccuracy();
+		$("#leftSidePanel").panel({
+			beforeopen : function(event, ui) {
+				pauseOverlay = false;
+				drawLoop();
+			}
+		});
+		$("#leftSidePanel").on("panelclose", function(event, ui) {
+			pauseOverlay = true;
+		});
+		// evaluateAccuracy();
 	};
 	webgazer.setRegression('ridge').setTracker('clmtrackr').setGazeListener(
 			function(data, clock) {
@@ -97,87 +152,19 @@ window.onload = function() {
 
 };
 
+function eyeTrackerPS() {
+
+}
+
 window.onbeforeunload = function() {
 	webgazer.end();
 	// window.localStorage.clear();
 };
 
-function loadText() {
-	textnumber++;
-	$("#textContainer").load(
-			'text' + textnumber + '.html',
-			function() {
-				$("#questionnaireFormDIV").css("display", "none").trigger(
-						'create');
-				// ADDING THE WORDS TO SPANS
-				var words = $("#readingText").html().split(" ");
-				var newWords = "<p id='0' data-visited-counter='0'>";
-				for (var p = 0; p < words.length; p++) {
-					if (words[p].length <= 1)
-						continue;
-					if (words[p].indexOf("<br") == -1) {
-						newWords += "<span class='spanWordContainer' id='" + p
-								+ "' >" + words[p] + "&nbsp;</span>";
-						numberOfWords++;
-					} else if (p > 0) {
-						numberOfParagraphs++;
-						newWords += "</p><p id='" + numberOfParagraphs
-								+ "' data-visited-counter='0'>";
-					}
-				}
-				newWords += "</p>";
-				$("#readingText").html(newWords).trigger("create");
-				$("#noOfWords").html(numberOfWords);
-				paintingWordsTimer = setInterval(paintTheWord, 30);
-				$("#textContainer").width($(window).width() - 366);
-				$("#textContainer").height($(window).height())
-						.trigger('create');
-				tenPercWidth = 0.1 * $("#readingText").width();
-				// COUNTING THE LINE NUMBERS
-				$("#readingText p").each(function(j, t) {
-					if ($(t).html().length <= 0) {
-						$(t).remove();
-						return false;
-					}
-					paragraphCoordinates.push(t);
-					sot(t);
-				});
-				$("#noOfLines").html(noOfRows);
-			}).trigger('create');
-}
-
-function sot(t) {
-	var rowDivs = "";
-	$(t)
-			.children()
-			.each(
-					function(k, l) {
-
-						if (lastTop == -1 || lastTop != $(l).position().top) {
-							lastTop = $(l).position().top;
-							noOfRows++;
-							if (rowDivs.length <= 0)
-								rowDivs += "<div class='ui-block-solo rowDivs' id='"
-										+ noOfRows + "'>";
-							else
-								rowDivs += "</div><div class='ui-block-solo rowDivs' id='"
-										+ noOfRows + "'>";
-						}
-						rowDivs += "<span class='spanWordContainer' id='" + k
-								+ "' >" + $(l).html() + "</span>";
-
-					});
-	rowDivs += "</div>";
-	$(t).html(rowDivs).trigger("create");
-}
-
-/**
- * Restart the calibration process by clearing the local storage and reseting
- * the calibration point
- */
 function Restart() {
 	document.getElementById("Accuracy").innerHTML = "Not yet Calibrated";
 	ClearCalibration();
 	PopUpInstruction();
+	$("#leftSidePanel").panel("close");
 	$("#Accuracy").trigger("create");
 }

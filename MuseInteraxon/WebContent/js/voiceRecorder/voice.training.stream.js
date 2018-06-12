@@ -32,7 +32,7 @@ function gotStream(stream) {
 	mediaStreamSource = audioContext.createMediaStreamSource(stream);
 	meter = createAudioMeter(audioContext);
 	mediaStreamSource.connect(meter);
-	drawLoop();
+//	drawLoop();
 }
 
 function createAudioMeter(audioContext, clipLevel, averaging, clipLag) {
@@ -78,13 +78,13 @@ function volumeAudioProcess(event) {
 	this.volume = Math.max(rms, this.volume * this.averaging);
 }
 
-function drawLoop(time) {
-//	updateBar("microphone", meter.volume);
-	$("#microphone").css("height", "0%");
-	$("#microphone").parent().css("background-color", getColorForPercentage(1 - meter.volume));
-	$("#volume").val(1- meter.volume);
-	rafID = window.requestAnimationFrame(drawLoop);
-}
+//function drawLoop(time) {
+////	updateBar("microphone", meter.volume);
+//	$("#microphone").css("height", "0%");
+//	$("#microphone").parent().css("background-color", getColorForPercentage(1 - meter.volume));
+//	$("#volume").val(1- meter.volume);
+//	rafID = window.requestAnimationFrame(drawLoop);
+//}
 
 function playNoise() {
 	var audioss = new Audio('sound/cardFan1.wav');

@@ -9,8 +9,29 @@ function onMessage(evt) {
 		var index = dataTMP.Concentration;
 		if (index != null) {
 			plotSignals(dataTMP);
-
 		}
+	}
+}
+
+function getColor(l) {
+	switch (l) {
+	case 0:
+		return '#00ff00';
+		break;
+	case 1:
+		return '#00ff00';
+		break;
+	case 2:
+		return '#FF9900';
+		break;
+	case 3:
+		return '#FF9900';
+		break;
+	case 4:
+		return '#ff0000';
+		break;
+	default:
+		return '#ff0000';
 	}
 }
 
@@ -22,9 +43,9 @@ function plotSignals(data) {
 		conc = 0;
 	if (medi == null)
 		medi = 0;
-	updateBar("X", measureAccel(data.ACC_X) / 100);
-	updateBar("Y", measureAccel(data.ACC_Y) / 100);
-	updateBar("Z", measureAccel(data.ACC_Z) / 100);
+	updateBar("X", (data.ACC_X + 1)/2);
+	updateBar("Y", (data.ACC_Y + 1)/2);
+	updateBar("Z", (data.ACC_Z + 1)/2);
 	updateBar("D", medi / 100);
 	updateBar("F", conc / 100);
 	updateBar("delta", data._delta);
@@ -32,6 +53,7 @@ function plotSignals(data) {
 	updateBar("gamma", data._gamma);
 	updateBar("theta", data._teta);
 	updateBar("beta", data._beta);
+	updateBar("MWPrediction",data.predictions.dl);
 	if (data.foreheadConneted)
 		$("#hs3").css('background-color', 'green');
 	else
@@ -53,7 +75,7 @@ function plotSignals(data) {
 }
 function measureAccel(inpt) {
 	var res = 0;
-	res = (inpt + 2000) / 40;
+	res = (inpt + 2000) / 20;
 	return res;
 }
 
@@ -86,89 +108,7 @@ var canvas2, context2, v, w, h;
 
 function startTraining() {
 	 connectToTheSocket();
-	 $.get("http://localhost:8080/MuseInteraxon/REST/GetWS/StartHeadband");
-//	 movePointer2Corners();
-}
-var pointerX, pointerY, movePointerInterval;
-function movePointer(x, y) {
-	pointerX = 0;
-	pointerY = 0;
-	movePointerInterval = setInterval(movePointerFromLeftToRight, 100);
-	$("#trackingDot").css("left", x + "px");
-	$("#trackingDot").css("top", y + "px");
-}
-
-function movePointerFromLeftToRight() {
-	pointerX += 20;
-	if (pointerX > $(window).width() - 22) {
-		pointerY += 40;
-		pointerX = 0;
-		if (pointerY > $(window).height() - 20) {
-			clearInterval(movePointerInterval);
-			movePointerInterval = setInterval(movePointer2Ways, 100);
-			pointerX = 0;
-			pointerY = 0;
-		}
-	}
-	$("#trackingDot").css("left", pointerX + "px");
-	$("#trackingDot").css("top", pointerY + "px");
-}
-
-var go2Ways = true;// To determine either we going or coming back.
-function movePointer2Ways() {
-	if (go2Ways) {
-		pointerX += 20;
-		if (pointerX > $(window).width() - 22) {
-			pointerY += 40;
-			go2Ways = false;
-		}
-	} else {
-		pointerX -= 20;
-		if (pointerX < 0) {
-			pointerY += 40;
-			go2Ways = true;
-		}
-	}
-	$("#trackingDot").css("left", pointerX + "px");
-	$("#trackingDot").css("top", pointerY + "px");
-	if (pointerY >= $(window).height() - 22) {
-		clearInterval(movePointerInterval);
-		$("#trackingDot").css("left", "50%");
-		$("#trackingDot").css("top", "50%");
-		movePointer2Corners();
-	}
-}
-
-function movePointer2Corners() {
-	setTimeout(function() {
-		$("#trackingDot").css("left", "0");
-		$("#trackingDot").css("top", "0");
-	}, 2500);
-	setTimeout(function() {
-		$("#trackingDot").css("left", "50%");
-		$("#trackingDot").css("top", "50%");
-	}, 4500);
-	setTimeout(function() {
-		$("#trackingDot").css("left", $(window).width() - 22);
-		$("#trackingDot").css("top", "0");
-	}, 6500);
-	setTimeout(function() {
-		$("#trackingDot").css("left", "0");
-		$("#trackingDot").css("top", $(window).height() - 22);
-	}, 8500);
-	setTimeout(function() {
-		$("#trackingDot").css("left", "50%");
-		$("#trackingDot").css("top", "50%");
-	}, 10500);
-	setTimeout(function() {
-		$("#trackingDot").css("left", $(window).width() - 22);
-		$("#trackingDot").css("top", $(window).height() - 22);
-	}, 12500);
-	setTimeout(function() {
-		$("#trackingDot").css("left", "0");
-		$("#trackingDot").css("top", "0");
-		 $.get("http://localhost:8080/MuseInteraxon/REST/GetWS/StopMeasuringAccelData");
-	}, 14500);
+	 $.get("http://localhost:8080/MuseInteraxon/REST/GetWS/ConnectHeadband");
 }
 
 function connectToTheSocket() {
@@ -210,7 +150,9 @@ function convertToBinary(dataURI) {
 	return bb;
 }
 
-function stopSoundTraining() {
+function finishRecording() {
 	$.get("http://localhost:8080/MuseInteraxon/REST/GetWS/StopHeadband");
-	websocket.close();
+	if(websocket!= null && websocket.readyState !== websocket.CLOSED) {
+		websocket.close();
+	}
 }

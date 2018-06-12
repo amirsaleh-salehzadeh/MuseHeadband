@@ -3,14 +3,9 @@ body {
 	overflow: hidden;
 }
 
-/* Video Feed Styling */
-#overlay {
-	z-index: 1;
-}
-
-.ui-page-theme-a .ui-btn {
-	color: white;
-	text-shadow: none;
+.ui-page-theme-a {
+	color: white !important;
+	text-shadow: none !important;
 }
 
 .ui-listview {
@@ -21,62 +16,31 @@ body {
 	padding: 0;
 }
 
-.helpBtn {
-	padding: 15px;
-	border: none;
-	background: none;
-	color: #777;
-}
-
-.ui-panel.ui-panel-open {
-	position: fixed;
-	overflow: hidden;
-}
-
-.ui-panel,.ui-panel-inner {
-	height: 100%;
-	overflow-y: scroll;
-	overflow-x: hidden;
-	min-width: 320px;
-}
-
-#mainPage,#pageContents {
+#mainPage, #pageContents {
 	width: 100%;
 	height: 100%;
-	overflow: hidden;
+	text-align: center;
 }
 
 .ui-header {
 	border: none !important;
 }
 
-.ui-panel-inner,#leftSidePanel {
-	padding: 0.22em !important;
-	min-width: 320px !important;
+#footerBar {
+	font-weight: normal;
+	font-size: 11pt;
+	padding-left: 3px;
+	text-align: left;
+	vertical-align: middle;
 }
-
 .ui-content {
 	padding: 0px !important;
 }
 
-#webGazerContainerLI {
-	min-height: 240px;
-}
-
 .ui-page-theme-a .ui-body-inherit {
-	background: none;
+	/* 	background: none; */
 	color: white;
 	text-shadow: none;
-}
-
-.helpBtn a {
-	background: none;
-	color: #777;
-}
-
-.helpBtn a:hover {
-	color: black !important;
-	text-decoration: none;
 }
 
 .modal-header {
@@ -90,7 +54,7 @@ body {
 	-webkit-border-radius: 25px !important;
 	-moz-border-radius: 25px !important;
 	border-radius: 25px !important;
-	opacity: 0.2 !important;
+	opacity: 0.2;
 	border-color: black !important;
 	border-style: solid !important;
 	position: absolute !important;
@@ -105,6 +69,7 @@ body {
 	display: none;
 	height: 100%;
 	left: 0;
+	z-index: 9999;
 }
 
 /* Calibration point position */
@@ -166,9 +131,30 @@ body {
 #textContainer {
 	text-shadow: none;
 	background-color: white;
-	padding: 0px 22px 0px 22px;
 	display: inline-block;
 	line-height: 1.4;
+	width: 77%;
+	height: 100%;
+	z-index: 2;
+}
+
+#textContainer p {
+	line-height: 1.3;
+}
+
+#webGazerContainer {
+	position: relative;
+	bottom: 0;
+	left: 0;
+}
+
+#evaluationDiv {
+	position: absolute;
+	bottom: 0px;
+	left: 0px;
+	right: 0px;
+	z-index: 1;
+	background-color: rgba(122, 0, 0, .6);
 }
 
 #readingText {
@@ -178,16 +164,6 @@ body {
 	float: right;
 }
 
-.spanWordContainer {
-	display: inline-block;
-	font-size: 18pt;
-	padding-right: 3px;
-}
-
-.ui-panel-page-content-position-right.ui-panel-page-content-display-push
-	{
-	margin-right: 52px;
-}
 
 .gazedParagraph {
 	border-radius: 11px;
@@ -205,6 +181,12 @@ body {
 	box-shadow: 0 2px 1px #999;
 }
 
-#readingText p {
-	padding: 3px;
+
+#textContainer div {
+	text-align: justify;
+	line-height: 1.3;
+	background-color: white;
+	color: black;
+	padding-left: 7px;
+	padding-right: 7px;
 }

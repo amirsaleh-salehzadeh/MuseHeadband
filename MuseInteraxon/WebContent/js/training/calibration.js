@@ -116,7 +116,7 @@ $(document).ready(function(){
                             ClearCanvas();
                             if(textnumber>0)
                             textnumber--;
-                            loadText();
+// loadText();
                           } else {
                             // use restart function to restart the calibration
                             ClearCalibration();
@@ -142,6 +142,7 @@ function evaluateAccuracy(){
 	      confirm: true
 	    }
 	  }).then(isConfirm => {
+$("#leftSidePanel").panel("close");
 	    $(".Calibration").hide();
 	    $(".calibrationDiv").show();
 	    $("#Pt5").show();
@@ -166,7 +167,7 @@ function evaluateAccuracy(){
 			ClearCanvas();
 			if(textnumber>0)
                 textnumber--;
-			loadText();
+// loadText();
 			} else {
 			ClearCalibration();
 			ClearCanvas();

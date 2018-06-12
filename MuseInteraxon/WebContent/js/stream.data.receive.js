@@ -66,7 +66,31 @@ function onMessage(evt) {
 	}
 }
 
+function getColor(l) {
+	switch (l) {
+	case 0:
+		return '#00ff00';
+		break;
+	case 1:
+		return '#00ff00';
+		break;
+	case 2:
+		return '#FF9900';
+		break;
+	case 3:
+		return '#FF9900';
+		break;
+	case 4:
+		return '#ff0000';
+		break;
+	default:
+		return '#ff0000';
+	}
+}
+
 function plotSignals(data) {
+	if(data == null)
+		return;
 	isStreaming = true;
 	var conc = Math.round(data.Concentration);
 	var medi = Math.round(data.Meditation);
@@ -114,27 +138,6 @@ function measureAccel(inpt) {
 	return res;
 }
 
-function getColor(l) {
-	switch (l) {
-	case 0:
-		return '#00ff00';
-		break;
-	case 1:
-		return '#00ff00';
-		break;
-	case 2:
-		return '#FF9900';
-		break;
-	case 3:
-		return '#FF9900';
-		break;
-	case 4:
-		return '#ff0000';
-		break;
-	default:
-		return '#ff0000';
-	}
-}
 
 function binaryToString(str) {
 	var binaryCode = [];

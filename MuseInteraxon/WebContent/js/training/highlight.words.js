@@ -21,7 +21,7 @@ function evaluateTheGazedPosition(data, clock) {
 		distX = sumx / 10;
 		distY = sumy / 10;
 	}
-	highlightTheGazedParagraph(distX, distY);
+//	highlightTheGazedParagraph(distX, distY);
 }
 
 function calculateDistance(elem, mouseX, mouseY) {

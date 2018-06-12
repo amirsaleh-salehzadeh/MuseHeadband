@@ -1,5 +1,8 @@
 package app.datastream.eeg;
 
+import com.google.gson.Gson;
+
+import app.AIengine.dataprepration.RecordData;
 import app.common.MuseSignalEntity;
 import oscP5.*;
 
@@ -7,10 +10,31 @@ public class MuseOscServer {
 	private boolean isAbs = false;
 	public static MuseSignalEntity EEG;
 	public static OscP5 museServer;
+	private static Gson mapper;
+	public static boolean record;
+	private static long lastTime = 0;
+	public static String jsonVal;
 
 	void oscEvent(OscMessage msg) {
-		if (EEG == null)
+		if (lastTime == 0)
+			lastTime = System.currentTimeMillis();
+
+		if (lastTime + 5 > System.currentTimeMillis()) {
+			return;
+		}
+		lastTime = System.currentTimeMillis();
+		if (EEG == null) {
 			EEG = new MuseSignalEntity();
+			mapper = new Gson();
+
+		}
+		if (msg.checkAddrPattern("/muse/fft")) {
+			for (int i = 0; i < 129; i++) {
+				EEG.appendFFTValue(i, msg.get(i).floatValue());
+				// System.out.print("EEG on channel " + i + ": " + msg.get(i).floatValue() +
+				// "\n");
+			}
+		}
 		if (msg.checkAddrPattern("/muse/eeg") == true) {
 			EEG.setEEG1(msg.get(0).floatValue());
 			EEG.setEEG2(msg.get(1).floatValue());
@@ -19,41 +43,41 @@ public class MuseOscServer {
 		}
 		if (isAbs) {
 			if (msg.checkAddrPattern("/muse/elements/low_freqs_absolute") == true) {
-				EEG.setLowFreq(getVal(msg));
+				EEG.setLowFreqABS(getVal(msg));
 			}
 			if (msg.checkAddrPattern("/muse/elements/delta_absolute") == true) {
-				EEG.setDelta(getVal(msg));
+				EEG.setDeltaABS(getVal(msg));
 			}
 			if (msg.checkAddrPattern("/muse/elements/theta_absolute") == true) {
-				EEG.setTeta(getVal(msg));
+				EEG.setTetaABS(getVal(msg));
 			}
 			if (msg.checkAddrPattern("/muse/elements/alpha_absolute") == true) {
-				EEG.setAlpha(getVal(msg));
+				EEG.setAlphaABS(getVal(msg));
 			}
 			if (msg.checkAddrPattern("/muse/elements/beta_absolute") == true) {
-				EEG.setBeta(getVal(msg));
+				EEG.setBetaABS(getVal(msg));
 			}
 			if (msg.checkAddrPattern("/muse/elements/gamma_absolute") == true) {
-				EEG.setGamma(getVal(msg));
+				EEG.setGammaABS(getVal(msg));
 			}
 		} else {
 			if (msg.checkAddrPattern("/muse/elements/low_freqs_relative") == true) {
-				EEG.setLowFreq(getVal(msg));
+				EEG.setLowFreqR(getVal(msg));
 			}
 			if (msg.checkAddrPattern("/muse/elements/delta_relative") == true) {
-				EEG.setDelta(getVal(msg));
+				EEG.setDeltaR(getVal(msg));
 			}
 			if (msg.checkAddrPattern("/muse/elements/theta_relative") == true) {
-				EEG.setTeta(getVal(msg));
+				EEG.setTetaR(getVal(msg));
 			}
 			if (msg.checkAddrPattern("/muse/elements/alpha_relative") == true) {
-				EEG.setAlpha(getVal(msg));
+				EEG.setAlphaR(getVal(msg));
 			}
 			if (msg.checkAddrPattern("/muse/elements/beta_relative") == true) {
-				EEG.setBeta(getVal(msg));
+				EEG.setBetaR(getVal(msg));
 			}
 			if (msg.checkAddrPattern("/muse/elements/gamma_relative") == true) {
-				EEG.setGamma(getVal(msg));
+				EEG.setGammaR(getVal(msg));
 			}
 		}
 		if (msg.checkAddrPattern("/muse/elements/delta_session_score") == true) {
@@ -72,8 +96,8 @@ public class MuseOscServer {
 			EEG.set_gamma(getVal(msg));
 		}
 		if (msg.checkAddrPattern("/muse/elements/horseshoe") == true) {
-			float[] tmp = { msg.get(0).floatValue(), msg.get(1).floatValue(),
-					msg.get(2).floatValue(), msg.get(3).floatValue() };
+			float[] tmp = { msg.get(0).floatValue(), msg.get(1).floatValue(), msg.get(2).floatValue(),
+					msg.get(3).floatValue() };
 			EEG.setHorseShoes(tmp);
 		}
 		if (msg.checkAddrPattern("/muse/batt") == true) {
@@ -91,7 +115,6 @@ public class MuseOscServer {
 			EEG.setREF(msg.get(1).floatValue());
 		}
 		if (msg.checkAddrPattern("/muse/acc") == true) {
-			System.out.println(System.currentTimeMillis());
 			EEG.setACC_X(msg.get(0).floatValue() / 2000);
 			EEG.setACC_Y(msg.get(1).floatValue() / 2000);
 			EEG.setACC_Z(msg.get(2).floatValue() / 2000);
@@ -107,14 +130,18 @@ public class MuseOscServer {
 			} else
 				EEG.setBlink(false);
 		}
-
 		if (msg.checkAddrPattern("/muse/elements/experimental/concentration") == true) {
 			EEG.setConcentration(msg.get(0).floatValue() * 100);
 		}
 		if (msg.checkAddrPattern("/muse/elements/experimental/mellow") == true) {
 			EEG.setMeditation(msg.get(0).floatValue() * 100);
 		}
-
+		if (record) {
+			EEG.setIMG("");
+			jsonVal = mapper.toJson(EEG);
+			System.out.println(jsonVal);
+			RecordData.recordMainTask(jsonVal, true);
+		}
 	}
 
 	private float getVal(OscMessage msg) {

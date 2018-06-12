@@ -1,17 +1,32 @@
 package app.common;
 
+import java.util.HashMap;
+
 public class MuseSignalEntity {
+	public double currentTime = System.currentTimeMillis();
 	public float alpha = 0;
 	public float beta = 0;
 	public float teta = 0;
 	public float gamma = 0;
 	public float delta = 0;
+	public float lowFreq = 0;
+	public float alphaABS = 0;
+	public float betaABS = 0;
+	public float tetaABS = 0;
+	public float gammaABS = 0;
+	public float deltaABS = 0;
+	public float lowFreqABS = 0;
+	public float alphaR = 0;
+	public float betaR = 0;
+	public float tetaR = 0;
+	public float gammaR = 0;
+	public float deltaR = 0;
+	public float lowFreqR = 0;
 	public float _alpha = 0;
 	public float _beta = 0;
 	public float _teta = 0;
 	public float _gamma = 0;
 	public float _delta = 0;
-	public float lowFreq = 0;
 	public boolean foreheadConneted;
 	public boolean blink;
 	public float[] horseShoes;
@@ -32,20 +47,170 @@ public class MuseSignalEntity {
 	public float Concentration = 0;
 	public float Meditation = 0;
 	public String IMG = "";
-	public double predictions = 0;
-	
-	/**
-	 * @return the predictions
-	 */
-	public double getPredictions() {
+	public HashMap<String, String> predictions;
+	public HashMap<String, String> FFTValues;
+	public double[] faceFeatures;
+
+	public double[] getFaceFeatures() {
+		return faceFeatures;
+	}
+
+	public double getCurrentTime() {
+		return currentTime;
+	}
+
+	public void setCurrentTime(double currentTime) {
+		this.currentTime = currentTime;
+	}
+
+	public float getLowFreqABS() {
+		return lowFreqABS;
+	}
+
+	public void setLowFreqABS(float lowFreqABS) {
+		this.lowFreqABS = lowFreqABS;
+	}
+
+	public float getAlphaABS() {
+		return alphaABS;
+	}
+
+	public void setAlphaABS(float alphaABS) {
+		this.alphaABS = alphaABS;
+	}
+
+	public float getBetaABS() {
+		return betaABS;
+	}
+
+	public void setBetaABS(float betaABS) {
+		this.betaABS = betaABS;
+	}
+
+	public float getTetaABS() {
+		return tetaABS;
+	}
+
+	public void setTetaABS(float tetaABS) {
+		this.tetaABS = tetaABS;
+	}
+
+	public float getGammaABS() {
+		return gammaABS;
+	}
+
+	public void setGammaABS(float gammaABS) {
+		this.gammaABS = gammaABS;
+	}
+
+	public float getDeltaABS() {
+		return deltaABS;
+	}
+
+	public void setDeltaABS(float deltaABS) {
+		this.deltaABS = deltaABS;
+	}
+
+	public float getLowFreqR() {
+		return lowFreqR;
+	}
+
+	public void setLowFreqR(float lowFreqR) {
+		this.lowFreqR = lowFreqR;
+	}
+
+	public float getAlphaR() {
+		return alphaR;
+	}
+
+	public void setAlphaR(float alphaR) {
+		this.alphaR = alphaR;
+	}
+
+	public float getBetaR() {
+		return betaR;
+	}
+
+	public void setBetaR(float betaR) {
+		this.betaR = betaR;
+	}
+
+	public float getTetaR() {
+		return tetaR;
+	}
+
+	public void setTetaR(float tetaR) {
+		this.tetaR = tetaR;
+	}
+
+	public float getGammaR() {
+		return gammaR;
+	}
+
+	public void setGammaR(float gammaR) {
+		this.gammaR = gammaR;
+	}
+
+	public float getDeltaR() {
+		return deltaR;
+	}
+
+	public void setDeltaR(float deltaR) {
+		this.deltaR = deltaR;
+	}
+
+	public float getGYRO_X() {
+		return GYRO_X;
+	}
+
+	public void setGYRO_X(float gYRO_X) {
+		GYRO_X = gYRO_X;
+	}
+
+	public float getGYRO_Y() {
+		return GYRO_Y;
+	}
+
+	public void setGYRO_Y(float gYRO_Y) {
+		GYRO_Y = gYRO_Y;
+	}
+
+	public float getGYRO_Z() {
+		return GYRO_Z;
+	}
+
+	public void setGYRO_Z(float gYRO_Z) {
+		GYRO_Z = gYRO_Z;
+	}
+
+	public HashMap<String, String> getPredictions() {
 		return predictions;
 	}
 
-	/**
-	 * @param predictions the predictions to set
-	 */
-	public void setPredictions(double predictions) {
+	public void setPredictions(HashMap<String, String> predictions) {
+		if (predictions == null)
+			predictions = new HashMap<String, String>();
 		this.predictions = predictions;
+	}
+
+	public HashMap<String, String> getFFTValues() {
+		return FFTValues;
+	}
+
+	public void setFFTValues(HashMap<String, String> fFTValues) {
+		if (FFTValues == null)
+			FFTValues = new HashMap<String, String>();
+		FFTValues = fFTValues;
+	}
+	
+	public void appendFFTValue(int key, double value) {
+		if (FFTValues == null)
+			FFTValues = new HashMap<String, String>();
+		FFTValues.put(key+"", value+"");
+	}
+	
+	public void setFaceFeatures(double[] faceFeatures) {
+		this.faceFeatures = faceFeatures;
 	}
 
 	/**
@@ -56,7 +221,8 @@ public class MuseSignalEntity {
 	}
 
 	/**
-	 * @param iMG the iMG to set
+	 * @param iMG
+	 *            the iMG to set
 	 */
 	public void setIMG(String iMG) {
 		IMG = iMG;
@@ -70,7 +236,8 @@ public class MuseSignalEntity {
 	}
 
 	/**
-	 * @param concentration the concentration to set
+	 * @param concentration
+	 *            the concentration to set
 	 */
 	public void setConcentration(float concentration) {
 		Concentration = concentration;
@@ -84,7 +251,8 @@ public class MuseSignalEntity {
 	}
 
 	/**
-	 * @param meditation the meditation to set
+	 * @param meditation
+	 *            the meditation to set
 	 */
 	public void setMeditation(float meditation) {
 		Meditation = meditation;
@@ -98,13 +266,12 @@ public class MuseSignalEntity {
 		this.blink = blink;
 	}
 
-	public MuseSignalEntity(float alpha, float beta, float teta, float gamma,
-			float delta, float _alpha, float _beta, float _teta, float _gamma,
-			float _delta, float lowFreq, boolean foreheadConneted,
-			float[] horseShoes, float battery, float temprature, float dRL,
-			float rEF, float aCC_X, float aCC_Y, float aCC_Z, float eEG1,
+	public MuseSignalEntity(float alpha, float beta, float teta, float gamma, float delta, float _alpha, float _beta,
+			float _teta, float _gamma, float _delta, float lowFreq, boolean foreheadConneted, float[] horseShoes,
+			float battery, float temprature, float dRL, float rEF, float aCC_X, float aCC_Y, float aCC_Z, float eEG1,
 			float eEG2, float eEG3, float eEG4, float concentration, float meditation) {
 		super();
+		predictions = new HashMap<>();
 		this.alpha = alpha;
 		this.beta = beta;
 		this.teta = teta;
@@ -205,11 +372,10 @@ public class MuseSignalEntity {
 		ACC_Z = (float) (aCC_Z * 9.8);
 	}
 
-	public MuseSignalEntity(float alpha, float beta, float teta, float gamma,
-			float delta, float _alpha, float _beta, float _teta, float _gamma,
-			float _delta, float lowFreq, float eEG1, float eEG2, float eEG3,
-			float eEG4) {
+	public MuseSignalEntity(float alpha, float beta, float teta, float gamma, float delta, float _alpha, float _beta,
+			float _teta, float _gamma, float _delta, float lowFreq, float eEG1, float eEG2, float eEG3, float eEG4) {
 		super();
+		predictions = new HashMap<>();
 		this.alpha = alpha;
 		this.beta = beta;
 		this.teta = teta;
@@ -348,12 +514,13 @@ public class MuseSignalEntity {
 	}
 
 	public MuseSignalEntity() {
+		predictions = new HashMap<>();
 	}
 
-	public MuseSignalEntity(float alpha, float beta, float teta, float gamma,
-			float delta, float lowFreq, float eEG1, float eEG2, float eEG3,
-			float eEG4) {
+	public MuseSignalEntity(float alpha, float beta, float teta, float gamma, float delta, float lowFreq, float eEG1,
+			float eEG2, float eEG3, float eEG4) {
 		super();
+		predictions = new HashMap<>();
 		this.alpha = alpha;
 		this.beta = beta;
 		this.teta = teta;

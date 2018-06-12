@@ -1,0 +1,187 @@
+<div class="ui-block-solo ui-bar">
+	<ul data-role="listview">
+		<li onclick="Restart()"><a href="#"><span href="#"
+				id="Accuracy">Not yet Calibrated</span> &nbsp;Recalibrate</a></li>
+		<li class="ui-bar"><div class="hprogress"
+				style="background-color: #7E0046;">
+				<div class="hprogress-bar animated slideInDown" role="progressbar"
+					aria-valuenow="85" aria-valuemin="0" aria-valuemax="100" id="delta"></div>
+				<div class="text-center p-absolute">
+					<i class="fa">&delta;</i>
+				</div>
+			</div>
+			<div class="hprogress" style="background-color: #0083FF;">
+				<div class="hprogress-bar animated slideInDown" role="progressbar"
+					aria-valuenow="85" aria-valuemin="0" aria-valuemax="100" id="theta"></div>
+				<div class="text-center p-absolute">
+					<i class="fa">&theta;</i>
+				</div>
+			</div>
+			<div class="hprogress" style="background-color: #13CD00;">
+				<div class="hprogress-bar animated slideInDown" role="progressbar"
+					aria-valuenow="85" aria-valuemin="0" aria-valuemax="100" id="alpha"></div>
+				<div class="text-center p-absolute">
+					<i class="fa">&alpha;</i>
+				</div>
+			</div>
+			<div class="hprogress" style="background-color: #FFC300">
+				<div class="hprogress-bar animated slideInDown" role="progressbar"
+					aria-valuenow="85" aria-valuemin="0" aria-valuemax="100" id="beta"></div>
+				<div class="text-center p-absolute">
+					<i class="fa">&beta;</i>
+				</div>
+			</div>
+			<div class="hprogress" style="background-color: #FF0000;">
+				<div class="hprogress-bar animated slideInDown" role="progressbar"
+					aria-valuenow="85" aria-valuemin="0" aria-valuemax="100" id="gamma"></div>
+				<div class="text-center p-absolute">
+					<i class="fa">&gamma;</i>
+				</div>
+			</div></li>
+		<li><div class="hprogress large" style="background-color: blue">
+				<div class="hprogress-bar animated slideInDown" role="progressbar"
+					aria-valuenow="85" aria-valuemin="0" aria-valuemax="100" id="D"></div>
+				<div class="text-center p-absolute">
+					<i class="fa">D</i>
+				</div>
+			</div>
+			<div class="hprogress large" style="background-color: green">
+				<div class="hprogress-bar animated slideInDown" role="progressbar"
+					aria-valuenow="85" aria-valuemin="0" aria-valuemax="100" id="F"></div>
+				<div class="text-center p-absolute">
+					<i class="fa">F</i>
+				</div>
+			</div> <!-- 			<div class="hprogress large" style="background-color: #FF0000;"> -->
+			<!-- 				<div class="hprogress-bar slideInDown" role="progressbar" -->
+			<!-- 					aria-valuenow="85" aria-valuemin="0" aria-valuemax="100" -->
+			<!-- 					id="MWPrediction"></div> --> <!-- 				<div class="text-center p-absolute"> -->
+			<!-- 					<i class="fa">MW</i> --> <!-- 				</div> --> <!-- 			</div> -->
+		</li>
+		<li><div class="hprogress" style="background-color: #FFC300">
+				<div class="hprogress-bar animated slideInDown" role="progressbar"
+					aria-valuenow="85" aria-valuemin="0" aria-valuemax="100" id="X"></div>
+				<div class="text-center p-absolute">
+					<i class="fa">X</i>
+				</div>
+			</div>
+			<div class="hprogress" style="background-color: #17FF00;">
+				<div class="hprogress-bar animated slideInDown" role="progressbar"
+					aria-valuenow="85" aria-valuemin="0" aria-valuemax="100" id="Y"></div>
+				<div class="text-center p-absolute">
+					<i class="fa">Y</i>
+				</div>
+			</div>
+			<div class="hprogress" style="background-color: #FF0000;">
+				<div class="hprogress-bar animated slideInDown" role="progressbar"
+					aria-valuenow="85" aria-valuemin="0" aria-valuemax="100" id="Z"></div>
+				<div class="text-center p-absolute">
+					<i class="fa">Z</i>
+				</div>
+			</div>
+			<div class="hprogress large" style="background-color: #FFF;">
+				<div class="hprogress-bar slideInDown" role="progressbar"
+					aria-valuenow="85" aria-valuemin="0" aria-valuemax="100"
+					id="microphone"></div>
+				<div class="text-center p-absolute">
+					<i class="fa">Mic</i>
+				</div>
+			</div></li>
+		<li>
+			<table>
+				<tr>
+					<td><img alt="battery" src="images/batt.png"></td>
+					<td><span style="color: green; font-size: 16pt;" id="battVal">--%</span></td>
+					<td id="hs1" class="horseShoes" style="color: white;">TP9</td>
+					<td id="hs2" class="horseShoes" style="color: white;">Fp1</td>
+					<td id="hs3" class="horseShoes" style="color: white;"></td>
+					<td id="hs4" class="horseShoes" style="color: white;">Fp2</td>
+					<td id="hs5" class="horseShoes" style="color: white;">TP10</td>
+					<td><div id="blinkContainer" style="visibility: hidden;">
+							<img alt="blink" src="images/eye.png">
+						</div></td>
+				</tr>
+			</table>
+		</li>
+		<!-- 							<li> -->
+		<!-- 								<div id="emotion_container"> -->
+		<!-- 									<div id="emotion_icons"> -->
+		<!-- 										<img class="emotion_icon" id="icon1" -->
+		<!-- 											src="images/media/icon_angry.png" style="visibility: hidden;"> -->
+		<!-- 										<img class="emotion_icon" id="icon2" -->
+		<!-- 											src="images/media/icon_sad.png" style="visibility: hidden;"> -->
+		<!-- 										<img class="emotion_icon" id="icon3" -->
+		<!-- 											src="images/media/icon_surprised.png" -->
+		<!-- 											style="visibility: hidden;"> <img class="emotion_icon" -->
+		<!-- 											id="icon4" src="images/media/icon_happy.png" -->
+		<!-- 											style="visibility: visible;"> -->
+		<!-- 									</div> -->
+		<!-- 									<div id="emotion_chart"> -->
+		<!-- 										<svg width="320" height="100"> -->
+		<!-- 											<rect x="20" y="66.35493501450489" -->
+		<!-- 												height="3.6450649854951127" width="30" fill="#2d578b"></rect> -->
+		<!-- 											<rect x="105" y="69.41838057022441" -->
+		<!-- 												height="0.5816194297755792" width="30" fill="#2d578b"></rect> -->
+		<!-- 											<rect x="190" y="60.40301444287701" height="9.59698555712299" -->
+		<!-- 												width="30" fill="#2d578b"></rect> -->
+		<!-- 											<rect x="275" y="20.78637720318563" -->
+		<!-- 												height="49.21362279681437" width="30" fill="#2d578b"></rect> -->
+		<!-- 											<text x="20" y="66.35493501450489" dx="-15" dy="1.2em" -->
+		<!-- 												text-anchor="middle" fill="white" class="labels">0.1</text> -->
+		<!-- 											<text x="135" y="69.41838057022441" dx="-15" dy="1.2em" -->
+		<!-- 												text-anchor="middle" fill="white" class="labels">0.0</text> -->
+		<!-- 											<text x="220" y="60.40301444287701" dx="-15" dy="1.2em" -->
+		<!-- 												text-anchor="middle" fill="white" class="labels">0.1</text> -->
+		<!-- 											<text x="305" y="20.78637720318563" dx="-15" dy="1.2em" -->
+		<!-- 												text-anchor="middle" fill="white" class="labels">0.7</text> -->
+		<!-- 											<text x="20" y="70" dx="-15" text-anchor="middle" -->
+		<!-- 												style="font-size: 12" transform="translate(0, 18)" -->
+		<!-- 												class="yAxis">angry</text> -->
+		<!-- 											<text x="135" y="70" dx="-15" text-anchor="middle" -->
+		<!-- 												style="font-size: 12" transform="translate(0, 18)" -->
+		<!-- 												class="yAxis">sad</text> -->
+		<!-- 											<text x="220" y="70" dx="-15" text-anchor="middle" -->
+		<!-- 												style="font-size: 12" transform="translate(0, 18)" -->
+		<!-- 												class="yAxis">surprised</text> -->
+		<!-- 											<text x="305" y="70" dx="-15" text-anchor="middle" -->
+		<!-- 												style="font-size: 12" transform="translate(0, 18)" -->
+		<!-- 												class="yAxis">happy</text></svg> -->
+		<!-- 									</div> -->
+		<!-- 								</div> -->
+		<!-- 							</li> -->
+		<!-- 		<li> -->
+		<!-- 			<div class="ui-grid-b"> -->
+		<!-- 				<div class="ui-block-a"> -->
+		<!-- 					<span id="noOfWords"></span>&nbsp;Words -->
+		<!-- 				</div> -->
+		<!-- 				<div class="ui-block-b"> -->
+		<!-- 					Word/Min: <span id="speadOfReading"></span> -->
+		<!-- 				</div> -->
+		<!-- 				<div class="ui-block-c"> -->
+		<!-- 					<span id="noOfLines"></span>&nbsp;Lines -->
+		<!-- 				</div> -->
+		<!-- 			</div> -->
+		<!-- 		</li> -->
+		<!-- 		<li><div class="ui-grid-a"> -->
+		<!-- 				<div class="ui-block-a"> -->
+		<!-- 					<a href="#" data-role="button" -->
+		<!-- 						class="ui-btn ui-corner-all ui-mini ui-shadow-icon ui-corner-all" -->
+		<!-- 						onclick="startTraining()">Start Headband</a> -->
+		<!-- 				</div> -->
+		<!-- 				<div class="ui-block-b"> -->
+		<!-- 					<a href="#" data-role="button" -->
+		<!-- 						class="ui-btn ui-corner-all ui-mini ui-shadow-icon ui-corner-all" -->
+		<!-- 						onclick="stopSoundTraining()">Stop</a> -->
+		<!-- 				</div> -->
+		<!-- 			</div> -->
+		<!-- 			<div data-role="navbar" data-grid="b"> -->
+		<!-- 				<ul> -->
+		<!-- 					<li><a href="#" onclick="readingStart()">Start</a></li> -->
+		<!-- 					<li><a href="#" onclick="readingPause()">Pause</a></li> -->
+		<!-- 					<li><a href="#">End</a></li> -->
+		<!-- 				</ul> -->
+		<!-- 			</div> /navbar</li> -->
+	</ul>
+</div>
+<div class="ui-block-solo" id="webGazerContainer">
+	<video id="webgazerVideoPresentation" autoplay=""></video>
+</div>

@@ -1,0 +1,187 @@
+body {
+	min-width: 600px !important;
+	overflow: hidden;
+}
+
+.ui-page-theme-a .ui-btn {
+	color: white;
+	text-shadow: none;
+}
+
+.ui-listview {
+	margin: 0 !important;
+}
+
+.ui-listview>.ui-li-static {
+	padding: 0;
+}
+
+#mainPage, #pageContents {
+	width: 100%;
+	height: 100%;
+	overflow: hidden;
+}
+
+.ui-header {
+	border: none !important;
+}
+
+#footerBar {
+	font-weight: normal;
+	font-size: 11pt;
+	padding-left: 3px;
+}
+
+.ui-content {
+	padding: 0px !important;
+	overflow: hidden;
+}
+
+.ui-page-theme-a .ui-body-inherit {
+	/* 	background: none; */
+	color: white;
+	text-shadow: none;
+}
+
+.modal-header {
+	border-bottom: none !important;
+}
+
+/* Calibration button styling */
+.Calibration {
+	width: 20px !important;
+	height: 20px !important;
+	-webkit-border-radius: 25px !important;
+	-moz-border-radius: 25px !important;
+	border-radius: 25px !important;
+	opacity: 0.2;
+	border-color: black !important;
+	border-style: solid !important;
+	position: absolute !important;
+}
+
+.calibrationDiv {
+	bottom: 0;
+	right: 0;
+	position: fixed;
+	background-color: white;
+	top: 0;
+	display: none;
+	height: 100%;
+	left: 0;
+}
+
+/* Calibration point position */
+#Pt1 {
+	top: 2%;
+	left: 5%;
+}
+
+#Pt2 {
+	top: 2%;
+	left: 50%;
+}
+
+#Pt3 {
+	top: 2%;
+	right: 2%;
+}
+
+#Pt4 {
+	top: 50%;
+	left: 2%;
+}
+
+#Pt5 {
+	top: 50%;
+	left: 50%;
+}
+
+#Pt6 {
+	top: 50%;
+	right: 5%;
+}
+
+#Pt7 {
+	bottom: 2%;
+	left: 2%;
+}
+
+#Pt8 {
+	bottom: 2%;
+	left: 50%;
+}
+
+#Pt9 {
+	bottom: 2%;
+	right: 2%;
+}
+
+#faceOverlay {
+	width: 117px;
+	height: 117px;
+	border: none !important;
+}
+
+#plotting_canvas {
+	z-index: -1;
+}
+
+#textContainer {
+	text-shadow: none;
+	background-color: white;
+	display: inline-block;
+	line-height: 1.4;
+	width: 100%;
+	height: 100%;
+	z-index: 2;
+	position: relative;
+}
+
+#webGazerContainer{
+	position: relative;
+	bottom: 0;
+	left: 0;
+}
+
+#evaluationDiv {
+	position: absolute;
+	bottom: 0px;
+	left: 0px;
+	right: 0px;
+	z-index: 1;
+	background-color: rgba(122, 0, 0, .6);
+}
+
+#readingText {
+	text-align: center;
+	display: inline;
+	vertical-align: middle;
+	float: right;
+}
+
+.spanWordContainer {
+	display: inline-block;
+	font-size: 18pt;
+	padding-right: 3px;
+}
+
+.gazedParagraph {
+	border-radius: 11px;
+	background: transparent;
+	-webkit-box-shadow: 0 9px 6px #666;
+	-moz-box-shadow: 0 9px 6px #666;
+	box-shadow: 0 9px 6px #666;
+}
+
+.gazedParagraph span {
+	border-radius: 3px;
+	background: transparent;
+	-webkit-box-shadow: 0 2px 1px #999;
+	-moz-box-shadow: 0 2px 1px #999;
+	box-shadow: 0 2px 1px #999;
+}
+
+#readingText p {
+	padding: 3px;
+}

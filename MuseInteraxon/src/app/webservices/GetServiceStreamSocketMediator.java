@@ -26,12 +26,16 @@ public class GetServiceStreamSocketMediator {
 	public static Set<Session> peers = Collections.synchronizedSet(new HashSet<Session>());
 
 	@OnMessage
-	public void onMessage(byte[] imageData, @PathParam("client-id") String clientId, Session session) {
-		StringBuilder sb = new StringBuilder();
-		sb.append("data:image/png;base64,");
-		sb.append(StringUtils.newStringUtf8(Base64.encodeBase64(imageData, false)));
-		if (MuseOscServer.EEG != null && !MuseOscServer.EEG.getIMG().equals(sb.toString()))
-			MuseOscServer.EEG.setIMG(sb.toString());
+	public void onMessage(byte[] imageData, String faceFeatures, @PathParam("client-id") String clientId, Session session) {
+		System.out.println(faceFeatures);
+		if (imageData != null && imageData.length > 0) {
+			StringBuilder sb = new StringBuilder();
+			sb.append("data:image/png;base64,");
+			sb.append(StringUtils.newStringUtf8(Base64.encodeBase64(imageData, false)));
+			if (MuseOscServer.EEG != null && !MuseOscServer.EEG.getIMG().equals(sb.toString()))
+				MuseOscServer.EEG.setIMG(sb.toString());
+		}
+		
 	}
 
 	@OnOpen

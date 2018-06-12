@@ -4,8 +4,10 @@ import java.io.IOException;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Application;
@@ -13,8 +15,13 @@ import org.codehaus.jackson.JsonGenerationException;
 import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.ObjectMapper;
 
+import com.sun.jersey.multipart.FormDataParam;
+
 import app.AIengine.NeuralNetworks.FeedforwardNeuralNetwork;
+import app.common.MuseSignalEntity;
+import app.datastream.eeg.MuseOscServer;
 import app.datastream.eeg.ThreadEEGReceiver;
+import oscP5.OscP5;
 
 @Path("GetWS")
 public class GetService extends Application {
@@ -46,12 +53,18 @@ public class GetService extends Application {
 		return json;
 	}
 
+
+	static MuseOscServer museOscServer;
+	public static MuseSignalEntity EEG;
+	OscP5 museServer;
+
 	@GET
-	@Path("/StartHeadband")
+	@Path("/ConnectHeadband")
 	@Produces("application/json")
-	public String startHeadband() {
+	public String connectHeadband() {
 		if (t == null) {
 			t = new ThreadEEGReceiver();
+			t.killer = true;
 			Thread ts = new Thread(t);
 			ts.setName("EEGStream");
 			ts.setDaemon(true);
@@ -60,7 +73,7 @@ public class GetService extends Application {
 		if (t != null) {
 			t.stopHeadband = false;
 		}
-		String json = "[]";
+		String json = "";
 		return json;
 	}
 
@@ -75,11 +88,11 @@ public class GetService extends Application {
 			ts.setDaemon(true);
 			ts.start();
 		}
-		if (t != null) {
-			t.record = true;
-		}
+		// if (t != null) {
+		museOscServer.record = true;
+		// }
 
-		String json = "[]";
+		String json = "";
 		return json;
 	}
 
@@ -105,11 +118,11 @@ public class GetService extends Application {
 	@Produces("application/json")
 	public String stopMeasuringAccelData() {
 		if (t != null) {
-			t.accelRecord = false;
 			t.stopHeadband = true;
+			t.killer = false;
 			t = null;
 		}
-		String json = "[]";
+		String json = "";
 		return json;
 	}
 
@@ -119,17 +132,9 @@ public class GetService extends Application {
 	public String stopHeadband() {
 		if (t != null) {
 			t.stopHeadband = true;
+			t.killer = false;
 		}
-
-		String json = "[]";
-		return json;
-	}
-
-	@GET
-	@Path("/StopSoundTraining")
-	@Produces("application/json")
-	public String stopSoundTraining() {
-		FeedforwardNeuralNetwork.trainingFinished = true;
+		museOscServer.record = false;
 		String json = "[]";
 		return json;
 	}
