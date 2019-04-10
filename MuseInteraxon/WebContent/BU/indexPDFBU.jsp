@@ -27,6 +27,7 @@
 <script src="js/training/precision_calculation.js"></script>
 <script src="js/training/sweetalert.min.js"></script>
 <script src="js/training/resize_canvas.js"></script>
+<script src="js/training/popup.mind.wandering.js"></script>
 <script src="js/training/pdfobject.min.js"></script>
 <script type="text/javascript"
 	src="js/voiceRecorder/voice.training.stream.js"></script>
@@ -35,8 +36,7 @@
 </head>
 <body>
 	<div data-role="page" id="mainPage" data-theme="b">
-		<div data-role="header"
-			data-fullscreen="true">
+		<div data-role="header" data-fullscreen="true">
 			<a href="#leftSidePanel" data-role="button" id="leftSideMenuBTN"
 				role="button"
 				class="ui-btn ui-btn-left ui-icon-bars ui-btn-icon-notext ui-shadow ui-corner-all">&nbsp;</a>
@@ -50,7 +50,11 @@
 			<canvas id="plotting_canvas" width="100%" height="100%"
 				style="position: fixed; left: 0; right: 0; top: 0; bottom: 0;"></canvas>
 			<div class="ui-block-solo" id="textContainer"></div>
-			<div id="evaluationDiv"></div>
+			<div id="evaluationDiv" class="ui-block-solo">
+				<a href="#" onclick="openMWpopup()" data-role="button"
+					id="leftSideMenuBTN" role="button"
+					class="ui-btn ui-btn-right ui-icon-bars ui-btn-icon-notext ui-shadow ui-corner-all">&nbsp;</a>
+			</div>
 			<div class="calibrationDiv">
 				<input type="button" class="Calibration" id="Pt1"
 					style="display: none;" data-role="none"> <input
@@ -110,7 +114,7 @@
 				class="ui-btn ui-corner-all ui-shadow ui-btn-b ui-icon-delete ui-btn-icon-notext ui-btn-right">Close</a>
 			<div class="ui-block-solo">
 				<img src="images/th.jpg" width="64" height="64"
-					alt="webgazer demo instructions"> 
+					alt="webgazer demo instructions">
 			</div>
 			<fieldset data-role="controlgroup" data-type="horizontal"
 				data-mini="true">

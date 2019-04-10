@@ -147,7 +147,6 @@ body {
 #evaluationDiv {
 	position: absolute;
 	bottom: 0px;
-	left: 0px;
 	right: 0px;
 	z-index: 1;
 	background-color: rgba(122, 0, 0, .6);
